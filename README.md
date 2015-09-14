@@ -8,7 +8,7 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 
 * From the NuGet package manager console:
 
-  `Install-Package ResharperCodeContractNullability`
+  `Install-Package ResharperCodeContractNullabilityFxCop`
 
   `Install-Package JetBrains.Annotations`
 

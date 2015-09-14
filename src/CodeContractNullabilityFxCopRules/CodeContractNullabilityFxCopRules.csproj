@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C7E2D449-76BF-424D-8D70-2C8379FA7818}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CodeContractNullabilityFxCopRules</RootNamespace>
+    <AssemblyName>CodeContractNullabilityFxCopRules</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FxCopSdk, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(CodeAnalysisPath)\FxCopSdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Cci, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(CodeAnalysisPath)\Microsoft.Cci.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExternalAnnotations\DiskExternalAnnotationsLoader.cs" />
+    <Compile Include="ExternalAnnotations\ExternalAnnotationDocumentParser.cs" />
+    <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsCache.cs" />
+    <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsMap.cs" />
+    <Compile Include="ExternalAnnotations\Storage\MemberNullabilityInfo.cs" />
+    <Compile Include="ExternalAnnotations\Storage\ParameterNullabilityMap.cs" />
+    <Compile Include="SymbolAnalysis\DocumentationCommentFactory.cs" />
+    <Compile Include="SymbolAnalysis\SymbolTypeResolver.cs" />
+    <Compile Include="ItemNullabilityRule.cs" />
+    <Compile Include="SymbolAnalysis\AnalyzerFactory.cs" />
+    <Compile Include="SymbolAnalysis\Analyzers\BaseAnalyzer.cs" />
+    <Compile Include="SymbolAnalysis\Analyzers\FieldAnalyzer.cs" />
+    <Compile Include="SymbolAnalysis\GeneratedCodeHeuristics.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\FieldSymbol.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\ISymbol.cs" />
+    <Compile Include="SymbolAnalysis\HelperForSymbols.cs" />
+    <Compile Include="SymbolAnalysis\ISymbolVisitor.cs" />
+    <Compile Include="SymbolAnalysis\Analyzers\MethodReturnValueAnalyzer.cs" />
+    <Compile Include="SymbolAnalysis\Analyzers\ParameterAnalyzer.cs" />
+    <Compile Include="SymbolAnalysis\Analyzers\PropertyAnalyzer.cs" />
+    <Compile Include="SymbolAnalysis\SymbolFactory.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\MemberSymbol.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\MethodSymbol.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\ParameterSymbol.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\PropertySymbol.cs" />
+    <Compile Include="SymbolAnalysis\Symbols\TypeSymbol.cs" />
+    <Compile Include="Utilities\CodeAnnotations.cs" />
+    <Compile Include="NullabilityRule.cs" />
+    <Compile Include="CodeContractBaseRule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\EnumerableExtensions.cs" />
+    <Compile Include="Utilities\ExtensionPoint.cs" />
+    <Compile Include="Utilities\Guard.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RuleMetadata.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CodeContractNullabilityFxCopRules.nuspec">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="tools\install.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="tools\uninstall.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\CodeAnalysisRulesPlaceHolder.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Target Name="AfterBuild">
+    <!--
+      For easier debugging of NuGet install/uninstall scripts, add the next switch below to NuGet.exe:
+        -version $([System.DateTime]::Now.ToString(`yyMM`)).$([System.DateTime]::Now.ToString(`ddHH`)).$([System.DateTime]::Now.ToString(`mmss`))
+    -->
+    <Exec Command="&quot;$(SolutionDir)packages\NuGet.CommandLine.2.8.6\tools\NuGet.exe&quot; pack CodeContractNullabilityFxCopRules.nuspec -NoPackageAnalysis -OutputDirectory ." WorkingDirectory="$(OutDir)" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+    </Exec>
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

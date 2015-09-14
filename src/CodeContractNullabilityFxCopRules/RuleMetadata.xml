@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rules FriendlyName="Nullability Annotation Rules">
+  <Rule TypeName="NullabilityRule" Category="Nullability" CheckId="RNUL">
+    <Name>Member or parameter is missing nullability annotation.</Name>
+    <Description>Members or parameters that can contain null should be annotated with [NotNull] or [CanBeNull].</Description>
+    <Url>https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop</Url>
+    <Resolution Name="Decorate">Annotate '{0}' with [NotNull] or [CanBeNull].</Resolution>
+    <MessageLevel Certainty="100">Warning</MessageLevel>
+    <FixCategories>Breaking</FixCategories>
+    <Email />
+    <Owner>Bart Koelman</Owner>
+  </Rule>
+  <Rule TypeName="ItemNullabilityRule" Category="Nullability" CheckId="RINUL">
+    <Name>Member or parameter is missing item nullability annotation.</Name>
+    <Description>
+      Container members or parameters whose items can contain null should be annotated with [ItemNotNull] or
+      [ItemCanBeNull].
+    </Description>
+    <Url>https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop</Url>
+    <Resolution Name="ItemDecorate">Annotate '{0}' with [ItemNotNull] or [ItemCanBeNull].</Resolution>
+    <MessageLevel Certainty="100">Warning</MessageLevel>
+    <FixCategories>Breaking</FixCategories>
+    <Email />
+    <Owner>Bart Koelman</Owner>
+  </Rule>
+</Rules>

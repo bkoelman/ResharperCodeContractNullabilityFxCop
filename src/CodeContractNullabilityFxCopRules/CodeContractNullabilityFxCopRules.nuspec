@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ResharperCodeContractNullabilityFxCop</id>
+    <version>1.0.0</version>
+    <title>Resharper Code Contract Nullability FxCop Rules</title>
+    <authors>Bart Koelman</authors>
+    <owners>Bart Koelman</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Reports diagnostics, helping you to annotate your source tree with (Item)NotNull / (Item)CanBeNull attributes. See also: https://www.jetbrains.com/resharper/help/Code_Analysis__Code_Annotations.html</description>
+    <releaseNotes>Initial public version.</releaseNotes>
+    <language>en-us</language>
+    <tags>resharper code contracts annotations nullability fxcop canbenull notnull itemcanbenull itemnotnull</tags>
+  </metadata>
+  <files>
+    <file src="*.dll" target="tools\" exclude="**\Microsoft*.dll;**\FxCopSdk.dll" />
+    <file src="tools\*.ps1" target="tools\" />
+    <file src="Properties\CodeAnalysisRulesPlaceHolder.txt" target="content\" />
+  </files>
+</package>

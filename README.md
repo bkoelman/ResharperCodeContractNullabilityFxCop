@@ -16,4 +16,4 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 
 Instead of adding the JetBrains package, you can [put the annotation definitions directly in your source code](https://www.jetbrains.com/resharper/help/Code_Analysis__Annotations_in_Source_Code.html). In that case, it's recommended to set the `conditional` option checked.
 
-![Analyzer in action](https://github.com/bkoelman/ResharperCodeContractNullability/blob/gh-pages/images/analyzer-in-action.png)
+![Analyzer in action](https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop/blob/gh-pages/images/fxcop-analyzer-in-action.png)

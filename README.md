@@ -4,7 +4,7 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 
 ## Get started
 
-* You need [Visual Studio 2015](https://www.visualstudio.com/) and [Resharper 9](https://www.jetbrains.com/resharper/) to use this analyzer.
+* You need [Visual Studio](https://www.visualstudio.com/) 2013 (or lower) and [Resharper](https://www.jetbrains.com/resharper/) v8 or v9 to use this analyzer. See [here](https://github.com/bkoelman/ResharperCodeContractNullability) if you use Visual Studio 2015.
 
 * From the NuGet package manager console:
 
@@ -13,8 +13,6 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
   `Install-Package JetBrains.Annotations`
 
 * Rebuild your solution
-
-Alternatively, you can install as a Visual Studio Extension from the [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/97bdc5f4-f209-4441-a313-2c6e92631eaf).
 
 Instead of adding the JetBrains package, you can [put the annotation definitions directly in your source code](https://www.jetbrains.com/resharper/help/Code_Analysis__Annotations_in_Source_Code.html). In that case, it's recommended to set the `conditional` option checked.
 

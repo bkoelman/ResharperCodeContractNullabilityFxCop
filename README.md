@@ -1,4 +1,4 @@
-# Resharper Code Contract Nullability
+# Resharper Code Contract Nullability FxCop Rules
 
 This Visual Studio analyzer supports you in consequently annotating your codebase with Resharpers nullability attributes. Doing so improves the [nullability analysis engine in Resharper](https://www.jetbrains.com/resharper/help/Code_Analysis__Code_Annotations.html), so `NullReferenceException`s at runtime will become something from the past.
 

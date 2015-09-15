@@ -25,6 +25,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                 @"CodeContractNullabilityAnalyzer\external-annotations-cache.xml");
 
         // Prevents IOException (process cannot access file) when host executes analyzers in parallel.
+        [NotNull]
         private static readonly object LockObject = new object();
 
         [NotNull]
@@ -188,7 +189,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         {
             public DateTime HighestLastWriteTimeUtc { get; private set; }
 
-            public void VisitFile(string path)
+            public void VisitFile([NotNull] string path)
             {
                 var fileInfo = new FileInfo(path);
                 if (fileInfo.LastWriteTimeUtc > HighestLastWriteTimeUtc)

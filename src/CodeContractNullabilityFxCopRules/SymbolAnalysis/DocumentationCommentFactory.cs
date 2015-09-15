@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using CodeContractNullabilityFxCopRules.Utilities;
 using JetBrains.Annotations;
@@ -26,12 +27,14 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
             TypeNode declaringType = member.DeclaringType;
 
             // Determine all parent types of this potentially nested type.
-            IEnumerable<TypeNode> parentTypes = DetermineParentTypesIncludingCurrent(declaringType);
+            IEnumerable<TypeNode> parentTypes = DetermineParentTypesIncludingCurrent(declaringType).ToArray();
 
             List<TypeNode> typeTemplateParameters = CollectTypeTemplateParameters(parentTypes);
+            List<TypeNode> typeTemplateArguments = CollectTypeTemplateArguments(parentTypes);
             List<TypeNode> memberTemplateParameters = CollectMethodTemplateParameters(member);
 
-            var context = new WriteContext(typeTemplateParameters, memberTemplateParameters, textBuilder);
+            var context = new WriteContext(typeTemplateParameters, typeTemplateArguments, memberTemplateParameters,
+                textBuilder);
 
             OutputFullMethodName(context, member, prefixCharacter, declaringType);
             OutputMethodTemplateParameterCount(context);
@@ -62,7 +65,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 case NodeType.Event:
                     return 'E';
                 default:
-                    throw new ArgumentException(string.Format("Unsupported NodeType '{0}'.", member.NodeType), "member");
+                    throw new NotSupportedException(string.Format("Unsupported NodeType '{0}'.", member.NodeType));
             }
         }
 
@@ -95,6 +98,22 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 }
             }
             return typeTemplateParameters;
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private static List<TypeNode> CollectTypeTemplateArguments(
+            [NotNull] [ItemNotNull] IEnumerable<TypeNode> parentTypes)
+        {
+            var typeTemplateArguments = new List<TypeNode>();
+            foreach (TypeNode type in parentTypes)
+            {
+                if (type.TemplateArguments != null)
+                {
+                    typeTemplateArguments.AddRange(type.TemplateArguments);
+                }
+            }
+            return typeTemplateArguments;
         }
 
         [NotNull]
@@ -136,7 +155,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
             }
             else
             {
-                context.TextBuilder.Append(declaringType.FullName.Replace('+', '.'));
+                WriteOrdinaryType(context, declaringType, true);
                 context.TextBuilder.Append('.');
             }
             context.TextBuilder.Append(member.Name.Name.Replace('.', '#'));
@@ -201,7 +220,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 case NodeType.Struct:
                 case NodeType.EnumNode:
                 case NodeType.DelegateNode:
-                    WriteOrdinaryType(context, type);
+                    WriteOrdinaryType(context, type, false);
                     break;
                 case NodeType.Reference:
                     WriteReferenceType(context, type);
@@ -226,10 +245,10 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                     WriteOptionalModifier(context, type);
                     break;
                 default:
-                    throw new ArgumentException("Unsupported NodeType.", "type");
+                    throw new NotSupportedException(string.Format("Unsupported NodeType '{0}'.", type.NodeType));
             }
 
-            if (type.IsGeneric && type.TemplateArguments.Count != 0)
+            if (type.IsGeneric && type.TemplateArguments != null && type.TemplateArguments.Count != 0)
             {
                 // Undocumented: based on output from MS compilers.
                 context.TextBuilder.Append('{');
@@ -247,7 +266,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
             }
         }
 
-        private static void WriteOrdinaryType([NotNull] WriteContext context, [NotNull] TypeNode type)
+        private static void WriteOrdinaryType([NotNull] WriteContext context, [NotNull] TypeNode type, bool includeArity)
         {
             if (type.DeclaringType == null)
             {
@@ -263,10 +282,10 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 context.TextBuilder.Append('.');
             }
 
-            if (type.IsGeneric)
+            if (type.IsGeneric && type.Template != null)
             {
                 string templateName = type.Template.Name.Name.Replace('+', '.');
-                int pos = templateName.LastIndexOf('`');
+                int pos = includeArity ? -1 : templateName.LastIndexOf('`');
                 context.TextBuilder.Append(pos != -1 ? templateName.Substring(0, pos) : templateName);
             }
             else
@@ -298,6 +317,10 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
             {
                 // Undocumented: based on output from MS compilers.
                 context.TextBuilder.AppendFormat(CultureInfo.InvariantCulture, "``{0}", index);
+            }
+            else if ((index = context.TypeTemplateArguments.IndexOf(type)) != -1)
+            {
+                context.TextBuilder.AppendFormat(CultureInfo.InvariantCulture, "`{0}", index);
             }
             else
             {
@@ -397,15 +420,21 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
 
             [NotNull]
             [ItemNotNull]
+            public List<TypeNode> TypeTemplateArguments { get; private set; }
+
+            [NotNull]
+            [ItemNotNull]
             public List<TypeNode> MemberTemplateParameters { get; private set; }
 
             [NotNull]
             public StringBuilder TextBuilder { get; private set; }
 
             public WriteContext([NotNull] [ItemNotNull] List<TypeNode> typeTemplateParameters,
+                [NotNull] [ItemNotNull] List<TypeNode> typeTemplateArguments,
                 [NotNull] [ItemNotNull] List<TypeNode> memberTemplateParameters, [NotNull] StringBuilder textBuilder)
             {
                 TypeTemplateParameters = typeTemplateParameters;
+                TypeTemplateArguments = typeTemplateArguments;
                 MemberTemplateParameters = memberTemplateParameters;
                 TextBuilder = textBuilder;
             }

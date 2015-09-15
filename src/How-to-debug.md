@@ -36,7 +36,7 @@ Running from within a second Visual Studio instance
     Command line arguments:
         `..\..\..\..\RunTargetForVisualStudio\RunTargetForVisualStudio.sln`
 
-3. Press F5 to run
+3. Press Ctrl + F5 to run
 
 4. In the second Visual Studio instance, rebuild the solution. The Code Analysis window should now
    contain a list of the reported problems.

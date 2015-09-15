@@ -61,7 +61,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
 
         [NotNull]
         [ItemNotNull]
-        public IReadOnlyList<ParameterSymbol> Parameters
+        public IList<ParameterSymbol> Parameters
         {
             get
             {

@@ -68,7 +68,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
 
         [NotNull]
         [ItemNotNull]
-        public IReadOnlyCollection<TypeSymbol> TypeArguments
+        public IList<TypeSymbol> TypeArguments
         {
             get
             {
@@ -78,7 +78,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
 
         [NotNull]
         [ItemNotNull]
-        public IReadOnlyCollection<TypeSymbol> Interfaces
+        public IList<TypeSymbol> Interfaces
         {
             get
             {

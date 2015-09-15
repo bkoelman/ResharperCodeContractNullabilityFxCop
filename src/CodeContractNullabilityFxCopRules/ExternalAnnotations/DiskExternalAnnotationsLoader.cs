@@ -146,6 +146,8 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             {
                 Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs14\ExternalAnnotations"),
                 Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs12\ExternalAnnotations"),
+                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs11\ExternalAnnotations"),
+                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs10\ExternalAnnotations"),
                 Path.Combine(localAppDataFolder, @"JetBrains\ReSharper\vAny\packages")
             };
 

@@ -98,7 +98,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
                     if (ifaceMember != null)
                     {
-                        IReadOnlyList<ParameterSymbol> ifaceParameters = GetParametersFor(ifaceMember);
+                        IList<ParameterSymbol> ifaceParameters = GetParametersFor(ifaceMember);
                         ParameterSymbol ifaceParameter = ifaceParameters[parameter.ParameterListIndex];
 
                         if (ifaceParameter.HasNullabilityAnnotation(AppliesToItem) ||
@@ -114,7 +114,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
         [NotNull]
         [ItemNotNull]
-        private static IReadOnlyList<ParameterSymbol> GetParametersFor([NotNull] MemberSymbol member)
+        private static IList<ParameterSymbol> GetParametersFor([NotNull] MemberSymbol member)
         {
             var method = member as MethodSymbol;
             if (method != null)

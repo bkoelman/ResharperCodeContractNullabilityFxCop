@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisLogFile>$(OutputPath)\CodeAnalysisLog.xml</CodeAnalysisLogFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="CodeAnalysis.ruleset">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\ResharperCodeContractNullability.ruleset" />

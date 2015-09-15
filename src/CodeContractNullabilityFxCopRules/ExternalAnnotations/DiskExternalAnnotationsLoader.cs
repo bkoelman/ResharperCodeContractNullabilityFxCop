@@ -24,7 +24,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 @"CodeContractNullabilityAnalyzer\external-annotations-cache.xml");
 
-        // Prevents IOException (process cannot access file) when FxCop executes rules in parallel.
+        // Prevents IOException (process cannot access file) when host executes analyzers in parallel.
         private static readonly object LockObject = new object();
 
         [NotNull]
@@ -33,7 +33,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             try
             {
                 ExternalAnnotationsMap map = GetCached();
-                if (map.Count > -1)
+                if (map.Count > 0)
                 {
                     return map;
                 }
@@ -126,8 +126,8 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         {
             var result = new ExternalAnnotationsMap();
             var parser = new ExternalAnnotationDocumentParser();
-
             var recorder = new HighestLastWriteTimeUtcRecorder();
+
             foreach (string path in EnumerateAnnotationFiles())
             {
                 recorder.VisitFile(path);
@@ -150,11 +150,10 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
             var pathsToTry = new[]
             {
-                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs14\ExternalAnnotations"),
-                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs12\ExternalAnnotations"),
-                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs11\ExternalAnnotations"),
-                Path.Combine(localAppDataFolder, @"JetBrains\Installations\ReSharperPlatformVs10\ExternalAnnotations"),
-                Path.Combine(localAppDataFolder, @"JetBrains\ReSharper\vAny\packages")
+                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2013),
+                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2012),
+                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2010),
+                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8)
             };
 
             foreach (string path in pathsToTry)
@@ -185,7 +184,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             return info.HasNullabilityDefined || info.ParametersNullability.Count > 0;
         }
 
-        private class HighestLastWriteTimeUtcRecorder
+        private sealed class HighestLastWriteTimeUtcRecorder
         {
             public DateTime HighestLastWriteTimeUtc { get; private set; }
 
@@ -197,6 +196,20 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                     HighestLastWriteTimeUtc = fileInfo.LastWriteTimeUtc;
                 }
             }
+        }
+
+        private static class ExternalAnnotationFolders
+        {
+            public const string Resharper9ForVisualStudio2013 =
+                @"JetBrains\Installations\ReSharperPlatformVs12\ExternalAnnotations";
+
+            public const string Resharper9ForVisualStudio2012 =
+                @"JetBrains\Installations\ReSharperPlatformVs11\ExternalAnnotations";
+
+            public const string Resharper9ForVisualStudio2010 =
+                @"JetBrains\Installations\ReSharperPlatformVs10\ExternalAnnotations";
+
+            public const string Resharper8 = @"JetBrains\ReSharper\vAny\packages";
         }
     }
 }

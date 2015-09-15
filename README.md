@@ -17,3 +17,7 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 Instead of adding the JetBrains package, you can [put the annotation definitions directly in your source code](https://www.jetbrains.com/resharper/help/Code_Analysis__Annotations_in_Source_Code.html).
 
 ![Analyzer in action](https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop/blob/gh-pages/images/fxcop-analyzer-in-action.png)
+
+## Building, Testing, and Debugging
+
+To build, open `ResharperCodeContractNullabilityFxCop.sln` in Visual Studio 2013. Press `Ctrl + A` to run all unit tests. See [How-to-debug.md](src/How-to-debug.md) for debugging instructions.

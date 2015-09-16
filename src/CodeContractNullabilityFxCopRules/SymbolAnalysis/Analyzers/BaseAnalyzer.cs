@@ -99,7 +99,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             }
         }
 
-        private static bool IsCompilerNamed([NotNull] string identifierName)
+        protected static bool IsCompilerNamed([NotNull] string identifierName)
         {
             return identifierName.IndexOfAny(new[] { '<', '>', '$' }) != -1;
         }

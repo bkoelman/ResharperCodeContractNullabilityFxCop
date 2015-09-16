@@ -94,6 +94,16 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             return visitor.VisitParameter(this);
         }
 
+        public ParameterSymbol AsUnboundGenericParameterOrThis()
+        {
+            Method template = fxCopParameter.DeclaringMethod.Template;
+            if (template != null)
+            {
+                return new ParameterSymbol(template.Parameters[fxCopParameter.ParameterListIndex]);
+            }
+            return this;
+        }
+
         public override string ToString()
         {
             return fxCopParameter.Name.ToString();

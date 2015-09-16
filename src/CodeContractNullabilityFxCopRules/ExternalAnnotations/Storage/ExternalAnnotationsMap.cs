@@ -27,6 +27,8 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage
             var parameterSymbol = symbol as ParameterSymbol;
             if (parameterSymbol != null)
             {
+                parameterSymbol = parameterSymbol.AsUnboundGenericParameterOrThis();
+
                 ISymbol containingSymbol = parameterSymbol.ContainingMethod.ContainingProperty != null
                     ? (ISymbol) parameterSymbol.ContainingMethod.ContainingProperty
                     : parameterSymbol.ContainingMethod;
@@ -38,6 +40,12 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage
             }
             else
             {
+                var methodSymbol = symbol as MethodSymbol;
+                if (methodSymbol != null)
+                {
+                    symbol = (TSymbol) (ISymbol) methodSymbol.AsUnboundGenericMethodOrThis();
+                }
+
                 string id = symbol.GetDocumentationCommentId();
                 MemberNullabilityInfo memberInfo = TryGetMemberById(id);
                 return memberInfo != null && memberInfo.HasNullabilityDefined;

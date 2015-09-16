@@ -20,6 +20,11 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
         protected override bool RequiresAnnotation()
         {
+            if (IsCompilerNamed(Symbol.ContainingMethod.Name))
+            {
+                return false;
+            }
+
             if (Symbol.ContainingType != null && Symbol.ContainingType.HasCompilerGeneratedAnnotation)
             {
                 return false;

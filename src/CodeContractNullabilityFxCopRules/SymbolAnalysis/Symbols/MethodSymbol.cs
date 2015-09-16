@@ -85,6 +85,12 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             return visitor.VisitMethod(this);
         }
 
+        public MethodSymbol AsUnboundGenericMethodOrThis()
+        {
+            Method template = fxCopMethod.Template;
+            return template != null ? new MethodSymbol(template) : this;
+        }
+
         public override bool IsImplementationForInterfaceMember(MemberSymbol interfaceMember)
         {
             var interfaceMethod = interfaceMember as MethodSymbol;

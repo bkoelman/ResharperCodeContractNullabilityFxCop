@@ -41,10 +41,11 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 {
                     return iface.TypeArguments.Single();
                 }
-                if (iface.FullName == "System.Collections.IEnumerable")
-                {
-                    return new TypeSymbol(FrameworkTypes.Object);
-                }
+            }
+
+            if (type.Interfaces.PrependIfNotNull(type).Any(iface => iface.FullName == "System.Collections.IEnumerable"))
+            {
+                return new TypeSymbol(FrameworkTypes.Object);
             }
 
             return null;

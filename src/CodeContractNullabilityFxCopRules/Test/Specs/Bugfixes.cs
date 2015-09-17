@@ -44,6 +44,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
+        [GitHubIssue(1)]
         public void
             When_deriving_constructed_arrays_from_externally_annotated_interface_with_open_array_types_it_must_be_skipped
             ()
@@ -87,6 +88,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
+        [GitHubIssue(1)]
         public void
             When_deriving_constructed_arrays_from_externally_annotated_class_with_open_array_types_it_must_be_skipped()
         {
@@ -129,6 +131,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
+        [GitHubIssue(2)]
         public void When_indexer_has_multiple_parameters_it_must_be_reported()
         {
             // Arrange
@@ -152,6 +155,29 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
 
             // Assert
             result.Problems.Should().HaveCount(3);
+        }
+
+        [Test]
+        [GitHubIssue(3)]
+        public void When_array_item_type_is_value_type_it_must_be_skipped()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new ClassSourceCodeBuilder()
+                    .InGlobalScope(@"
+                        class C
+                        {
+                            byte[] f;
+                        }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
         }
     }
 }

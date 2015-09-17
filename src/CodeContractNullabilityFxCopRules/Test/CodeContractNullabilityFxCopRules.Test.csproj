@@ -90,6 +90,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="GitHubIssueAttribute.cs" />
     <Compile Include="Specs\Bugfixes.cs" />
     <Compile Include="TestDataBuilders\ClassSourceCodeBuilder.cs" />
     <Compile Include="TestDataBuilders\FxCopNullabilityRuleValidatorBuilder.cs" />

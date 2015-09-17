@@ -74,22 +74,22 @@ namespace CodeContractNullabilityFxCopRules
             return Problems;
         }
 
-        private void ReportProblem([NotNull] ISymbol symbol)
+        private void ReportProblem([NotNull] ISymbol symbol, [CanBeNull] string uniqueKeyToReportSymbol)
         {
             // The string in the .xml <Resolution> should contain one string arg, {0}
             Resolution resolution = GetNamedResolution(ruleName, symbol.Name);
 
             // Because FxCop does not track duplicates, we must do so ourselves.
-            if (!SymbolAlreadyReported(symbol))
+            if (!SymbolAlreadyReported(symbol, uniqueKeyToReportSymbol))
             {
                 var problem = new Problem(resolution, CheckId);
                 Problems.Add(problem);
             }
         }
 
-        private bool SymbolAlreadyReported([NotNull] ISymbol symbol)
+        private bool SymbolAlreadyReported([NotNull] ISymbol symbol, [CanBeNull] string uniqueKeyToReportSymbol)
         {
-            string symbolId = GetIdentifierForSymbol(symbol);
+            string symbolId = uniqueKeyToReportSymbol ?? GetIdentifierForSymbol(symbol);
             if (problemSymbols.Contains(symbolId))
             {
                 return true;

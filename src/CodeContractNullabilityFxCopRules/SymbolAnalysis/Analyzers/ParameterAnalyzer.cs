@@ -35,13 +35,17 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
                 if (Symbol.Name != "value" &&
                     (Symbol.ContainingMethod.Name == "get_Item" || Symbol.ContainingMethod.Name == "set_Item"))
                 {
-                    // When the parameter of an indexer property requires annotation, this code gets 
-                    // called twice: once for the parameter in get_Item method, then for the parameter 
-                    // in the set_Item method.
-                    // As a workaround to prevent reporting twice, we instead report on the property itself.
                     if (Symbol.ContainingMethod.ContainingProperty != null)
                     {
-                        ReportOnSymbol(Symbol.ContainingMethod.ContainingProperty);
+                        // When the parameter of an indexer property requires annotation, this code gets 
+                        // called twice: once for the parameter in get_Item method, then for the parameter 
+                        // in the set_Item method.
+                        // As a workaround to prevent reporting twice, we explicitly set the identity without
+                        // the intermediate method name in it.
+
+                        string uniqueReportKey =
+                            Symbol.ContainingMethod.ContainingProperty.GetDocumentationCommentId() + ":" + Symbol.Name;
+                        ReportOnSymbol(uniqueReportKey);
                     }
                 }
                 else

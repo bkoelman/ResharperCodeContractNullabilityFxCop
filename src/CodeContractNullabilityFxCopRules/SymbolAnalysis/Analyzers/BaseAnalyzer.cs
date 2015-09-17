@@ -12,7 +12,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
     /// </summary>
     public abstract class BaseAnalyzer
     {
-        public abstract void Analyze([NotNull] Action<ISymbol> reportProblem);
+        public abstract void Analyze([NotNull] Action<ISymbol, string> reportProblem);
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
         // Used for tracking duplicates. Note this does not actually change which symbol VS will highlight.
         [CanBeNull]
-        private ISymbol reportSymbol;
+        private string uniqueKeyToReportSymbol;
 
         [NotNull]
         protected ExternalAnnotationsMap ExternalAnnotations { get; private set; }
@@ -47,14 +47,14 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             AppliesToItem = appliesToItem;
         }
 
-        public override void Analyze(Action<ISymbol> reportProblem)
+        public override void Analyze(Action<ISymbol, string> reportProblem)
         {
             Guard.NotNull(reportProblem, "reportProblem");
 
             AnalyzeNullability(reportProblem);
         }
 
-        private void AnalyzeNullability([NotNull] Action<ISymbol> reportProblem)
+        private void AnalyzeNullability([NotNull] Action<ISymbol, string> reportProblem)
         {
             if (Symbol.HasNullabilityAnnotation(AppliesToItem))
             {
@@ -95,7 +95,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
             if (RequiresAnnotation())
             {
-                reportProblem(reportSymbol ?? Symbol);
+                reportProblem(Symbol, uniqueKeyToReportSymbol);
             }
         }
 
@@ -155,10 +155,10 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             return false;
         }
 
-        protected void ReportOnSymbol([NotNull] ISymbol symbol)
+        protected void ReportOnSymbol([NotNull] string uniqueKey)
         {
-            Guard.NotNull(symbol, "symbol");
-            reportSymbol = symbol;
+            Guard.NotNull(uniqueKey, "uniqueKey");
+            uniqueKeyToReportSymbol = uniqueKey;
         }
     }
 }

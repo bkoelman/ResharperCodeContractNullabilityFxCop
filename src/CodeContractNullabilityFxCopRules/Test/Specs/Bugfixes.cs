@@ -127,5 +127,31 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             // Assert
             result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
         }
+
+        [Test]
+        public void When_indexer_has_multiple_parameters_it_must_be_reported()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<NullabilityRule>()
+                .OnAssembly(new ClassSourceCodeBuilder()
+                    .InGlobalScope(@"
+                        class C
+                        {
+                            public int this[string a, string b, string c]
+                            {
+                                get { throw new NotImplementedException();}
+                                set { throw new NotImplementedException();}
+                            }
+                        }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.Problems.Should().HaveCount(3);
+        }
     }
 }

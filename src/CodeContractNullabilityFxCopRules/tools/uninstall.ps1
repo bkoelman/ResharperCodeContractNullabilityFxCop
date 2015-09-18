@@ -123,18 +123,29 @@ Write-Debug "ruleSetFileName = $ruleSetFileName"
 
 $ruleSetPath = Split-Path $project.FullName -parent | Join-Path -ChildPath $ruleSetFileName
 if ((Test-Path -Path $ruleSetPath)) {
-    Write-Host ".ruleset file found at: '$ruleSetPath'"
+    $isRuleSetShared = $ruleSetFileName.StartsWith('..')
+    if ($isRuleSetShared) {
+        Write-Host "Shared .ruleset file found at: '$ruleSetPath'"
+    }
+    else {
+        Write-Host ".ruleset file found at: '$ruleSetPath'"
+    }
 
     $cleanupResult = Cleanup-RuleSet-File $ruleSetPath $codeAnalysisRuleAssemblyFileName
-    if ($cleanupResult -eq $global:ruleSetFileIsEmpty) {
+    if ($cleanupResult -eq $global:ruleSetFileIsEmpty -and !$isRuleSetShared) {
         $properties.Item('CodeAnalysisRuleSet').Value = ''
         $properties.Item("RunCodeAnalysis").Value = 'False'
         Remove-File-From-Project $ruleSetPath $project
         Write-Host "Deactivated CodeAnalysis and removed empty .ruleset file."
     }
-    elseif ($cleanupResult -eq $global:ruleSetFileContainsData) {
+    elseif ($cleanupResult -eq $global:ruleSetFileContainsData -or $isRuleSetShared) {
         $properties.Item("RunCodeAnalysis").Value = 'True'
-        Write-Host "Leaving non-empty .ruleset file active."
+        if ($isRuleSetShared) {
+            Write-Host "Leaving shared .ruleset file active."
+        }
+        else {
+            Write-Host "Leaving non-empty .ruleset file active."
+        }
     }
     else {
         Write-Debug "cleanupResult = $cleanupResult"

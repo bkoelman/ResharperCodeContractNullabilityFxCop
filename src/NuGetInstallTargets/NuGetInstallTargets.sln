@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "h_MultipleRulesInCustomFile
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "b_InlineImplicitDefaultRule", "InlineImplicitDefaultRule\b_InlineImplicitDefaultRule.csproj", "{FE1F3057-7ABE-4AD1-B8BF-EEFC505B6889}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "i_SingleRuleInSharedCustomFile1", "ShareRoot\SingleRuleInSharedCustomFile1\i_SingleRuleInSharedCustomFile1.csproj", "{0CB3F663-6F98-4BE9-9077-DD065E87E554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "j_SingleRuleInSharedCustomFile2", "ShareRoot\SingleRuleInSharedCustomFile2\j_SingleRuleInSharedCustomFile2.csproj", "{2F4B1DDE-8EFE-4D3A-9229-D03A19CD21C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{FE1F3057-7ABE-4AD1-B8BF-EEFC505B6889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE1F3057-7ABE-4AD1-B8BF-EEFC505B6889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE1F3057-7ABE-4AD1-B8BF-EEFC505B6889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CB3F663-6F98-4BE9-9077-DD065E87E554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB3F663-6F98-4BE9-9077-DD065E87E554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB3F663-6F98-4BE9-9077-DD065E87E554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB3F663-6F98-4BE9-9077-DD065E87E554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F4B1DDE-8EFE-4D3A-9229-D03A19CD21C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4B1DDE-8EFE-4D3A-9229-D03A19CD21C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4B1DDE-8EFE-4D3A-9229-D03A19CD21C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4B1DDE-8EFE-4D3A-9229-D03A19CD21C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

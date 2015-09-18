@@ -7,7 +7,8 @@ param($installPath, $toolsPath, $package, $project)
 #
 # - See comment in AfterBuild target of CodeContractNullabilityFxCopRules.csproj to bypass nupkg caching,
 #       then run in a second VS instance on one of the projects in NuGetInstallTargets.sln:
-#           install-package ResharperCodeContractNullabilityFxCop -source "..\..\ResharperCodeContractNullabilityFxCop\CodeContractNullabilityFxCopRules\bin\x86\Debug\"; uninstall-package ResharperCodeContractNullabilityFxCop
+#           install-package ResharperCodeContractNullabilityFxCop -source "$([System.IO.Path]::GetDirectoryName((Get-Project).FileName))\..\..\CodeContractNullabilityFxCopRules\bin\x86\Debug\";
+#           uninstall-package ResharperCodeContractNullabilityFxCop
 #
 # - Use Write-Debug in this script to write messages to the NuGet console during install/uninstall
 #
@@ -114,6 +115,15 @@ function Append-Rules-To-RuleSet-File ($path, $assemblyPath) {
     $doc.Save($path)
 }
 
+function Ensure-Conditional-Compilation-Symbol ($properties) {
+    $conditionals = $properties.Item('DefineConstants').Value
+    $conditionalArray = $conditionals.Split('; ',  [System.StringSplitOptions]::RemoveEmptyEntries)
+    if (!$conditionalArray.Contains('JETBRAINS_ANNOTATIONS')) {
+        $properties.Item('DefineConstants').Value = $conditionals + ';JETBRAINS_ANNOTATIONS'
+        Write-Host "Added 'JETBRAINS_ANNOTATIONS' conditional compilation symbol."
+    }
+}
+
 $codeAnalysisRuleAssemblyFileName = "CodeContractNullabilityFxCopRules.dll"
 
 # remove placeholder file; a content file must exist in nuget for install.ps1 to run
@@ -179,3 +189,5 @@ Append-Rules-To-RuleSet-File $ruleSetPath $ruleAssemblyPath
 $properties.Item("RunCodeAnalysis").Value = 'True'
 $properties.Item('CodeAnalysisRuleSet').Value = $ruleSetFileName
 Write-Host "Activated CodeAnalysis and activated .ruleset file '$ruleSetFileName'."
+
+Ensure-Conditional-Compilation-Symbol $properties

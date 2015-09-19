@@ -10,11 +10,12 @@
     <projectUrl>https://github.com/bkoelman/ResharperCodeContractNullabilityFxCop</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      Reports diagnostics, helping you to annotate your source tree with (Item)NotNull / (Item)CanBeNull attributes. See also: https://www.jetbrains.com/resharper/help/Code_Analysis__Code_Annotations.html
-
-      You need Visual Studio 2013/2012/2010 and Resharper v8 or higher to use this analyzer. See package "ResharperCodeContractNullability" if you use Visual Studio 2015.
+      Reports diagnostics, helping you to annotate your source tree with (Item)NotNull / (Item)CanBeNull
+      attributes. See also: https://www.jetbrains.com/resharper/help/Code_Analysis__Code_Annotations.html You need
+      Visual Studio 2013/2012/2010 and Resharper v8 or higher to use this analyzer. See package
+      "ResharperCodeContractNullability" if you use Visual Studio 2015.
     </description>
-    <releaseNotes>Bugfixes in loading External Annotations; enabled build from source in VS2010 and VS2012.</releaseNotes>
+    <releaseNotes>Bugfixes in installer, caching and reporting correctness.</releaseNotes>
     <language>en-us</language>
     <tags>resharper code contracts annotations nullability fxcop canbenull notnull itemcanbenull itemnotnull</tags>
   </metadata>

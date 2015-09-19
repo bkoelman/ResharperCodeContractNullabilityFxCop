@@ -53,7 +53,7 @@ function Include-Rule-In-RuleSet-File ($path, $includePath) {
     $includeElement = $doc.CreateElement('Include')
     $includeElement.SetAttribute('Path', $includePath)
     $includeElement.SetAttribute('Action', 'Default')
-    $doc.RuleSet.InsertAfter($includeElement, $null)
+    $dummy= $doc.RuleSet.InsertAfter($includeElement, $null)
     Write-Host "Added include for '$includePath' to .ruleset file"
 
     # Save the .ruleset file to disk
@@ -68,7 +68,7 @@ function Ensure-RuleElements ($doc, [string[]] $ruleIds) {
             $ruleElement = $doc.CreateElement('Rule')
             $ruleElement.SetAttribute('Id', $ruleId)
             $ruleElement.SetAttribute('Action', 'Warning')
-            $doc.RuleSet.Rules.AppendChild($ruleElement)
+            $dummy = $doc.RuleSet.Rules.AppendChild($ruleElement)
             Write-Host "Added rule '$ruleId' to .ruleset file"
         }
     }
@@ -83,7 +83,7 @@ function Append-Rules-To-RuleSet-File ($path, $assemblyPath) {
     $ruleHintPathsElement = $doc.RuleSet.SelectSingleNode('RuleHintPaths')
     if (!$ruleHintPathsElement) {
         $ruleHintPathsElement = $doc.CreateElement('RuleHintPaths')
-        $doc.RuleSet.InsertAfter($ruleHintPathsElement, $null)
+        $dummy= $doc.RuleSet.InsertAfter($ruleHintPathsElement, $null)
         Write-Host "Added container 'RuleHintPaths' to .ruleset file."
     }
 
@@ -91,8 +91,8 @@ function Append-Rules-To-RuleSet-File ($path, $assemblyPath) {
     $pathElement = $ruleHintPathsElement.SelectSingleNode("Path[text()[contains(.,'$assemblyName')]]")
     if (!$pathElement) {
         $pathElement = $doc.CreateElement('Path')
-        $pathElement.AppendChild($doc.CreateTextNode($assemblyPath))
-        $ruleHintPathsElement.AppendChild($pathElement)
+        $dummy = $pathElement.AppendChild($doc.CreateTextNode($assemblyPath))
+        $dummy = $ruleHintPathsElement.AppendChild($pathElement)
         Write-Host "Added hint path for '$assemblyPath' to .ruleset file."
     }
     else {
@@ -104,7 +104,7 @@ function Append-Rules-To-RuleSet-File ($path, $assemblyPath) {
         $rulesElement = $doc.CreateElement('Rules')
         $rulesElement.SetAttribute('AnalyzerId', 'Microsoft.Analyzers.ManagedCodeAnalysis')
         $rulesElement.SetAttribute('RuleNamespace', 'Microsoft.Rules.Managed')
-        $doc.RuleSet.AppendChild($rulesElement)
+        $dummy = $doc.RuleSet.AppendChild($rulesElement)
         Write-Host "Added container 'Rules' to .ruleset file."
     }
 
@@ -163,7 +163,7 @@ if (!(Test-Path -Path $ruleSetPath)) {
     Create-Empty-RuleSet-File $ruleSetPath
 
     Write-Host "Attaching file at '$ruleSetPath' to project."
-    $project.ProjectItems.AddFromFile($ruleSetPath)
+    $dummy = $project.ProjectItems.AddFromFile($ruleSetPath)
 
     if ($existingRuleSetName) {
         Write-Debug "existingRuleSetName = $existingRuleSetName"

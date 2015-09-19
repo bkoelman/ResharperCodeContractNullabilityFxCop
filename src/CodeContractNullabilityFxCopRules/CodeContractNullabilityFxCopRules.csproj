@@ -113,12 +113,26 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Target Name="AfterBuild">
-    <!--
-      For easier debugging of NuGet install/uninstall scripts, add the next switch below to NuGet.exe:
-        -version $([System.DateTime]::Now.ToString(`yyMM`)).$([System.DateTime]::Now.ToString(`ddHH`)).$([System.DateTime]::Now.ToString(`mmss`))
-    -->
-    <Exec Command="&quot;$(SolutionDir)packages\NuGet.CommandLine.2.8.6\tools\NuGet.exe&quot; pack CodeContractNullabilityFxCopRules.nuspec -NoPackageAnalysis -OutputDirectory ." WorkingDirectory="$(OutDir)" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
+  <Target Name="GetSemanticVersionFromOutputAssembly">
+    <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">
+      <Output TaskParameter="Assemblies" ItemName="assemblyVersionInfo"/>
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <Pattern>(\d+)\.(\d+).(\d+)</Pattern>
+      <In>%(assemblyVersionInfo.Version)</In>
+      <SemanticVersion>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern)))</SemanticVersion>
+    </PropertyGroup>
+  </Target>
+  <Target Name="GetSemanticVersionFromCurrentTime">
+    <PropertyGroup>
+      <SemanticVersion>$([System.DateTime]::Now.ToString(`yyMM`)).$([System.DateTime]::Now.ToString(`ddHH`)).$([System.DateTime]::Now.ToString(`mmss`))</SemanticVersion>
+    </PropertyGroup>
+  </Target>
+  <!--
+    For easier debugging of NuGet install/uninstall scripts, change DependsOnTargets below to "GetSemanticVersionFromCurrentTime".
+  -->
+  <Target Name="AfterBuild" DependsOnTargets="GetSemanticVersionFromOutputAssembly">
+    <Exec Command="&quot;$(SolutionDir)packages\NuGet.CommandLine.2.8.6\tools\NuGet.exe&quot; pack CodeContractNullabilityFxCopRules.nuspec -NoPackageAnalysis -OutputDirectory . -version $(SemanticVersion)" WorkingDirectory="$(OutDir)" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
     </Exec>
   </Target>

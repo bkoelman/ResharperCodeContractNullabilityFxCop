@@ -6,6 +6,8 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 
 * You need [Visual Studio](https://www.visualstudio.com/) 2013 (or lower) and [Resharper](https://www.jetbrains.com/resharper/) v8 or higher to use this analyzer. See [here](https://github.com/bkoelman/ResharperCodeContractNullability) if you use Visual Studio 2015.
 
+* Activate the solution configuration in which you want to install (Debug/Release)
+
 * From the NuGet package manager console:
 
   `Install-Package ResharperCodeContractNullabilityFxCop`

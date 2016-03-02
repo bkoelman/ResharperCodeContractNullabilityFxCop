@@ -148,11 +148,16 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         [ItemNotNull]
         private static IEnumerable<string> EnumerateAnnotationFiles()
         {
+            string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             int vsVersion = GetVisualStudioMajorVersion();
 
             var foldersToScan = new[]
             {
+                Path.Combine(programFilesX86Folder,
+                    string.Format(ExternalAnnotationFolders.Resharper9OrHigher.BuiltIn, vsVersion)),
+                Path.Combine(programFilesX86Folder,
+                    string.Format(ExternalAnnotationFolders.Resharper9OrHigher.Extensions, vsVersion)),
                 Path.Combine(localAppDataFolder,
                     string.Format(ExternalAnnotationFolders.Resharper9OrHigher.BuiltIn, vsVersion)),
                 Path.Combine(localAppDataFolder,
@@ -160,28 +165,32 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             };
 
             var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (string folder in foldersToScan)
-            {
-                AppendToSetFrom(folder, fileSet);
-            }
+            AppendToSetFrom(foldersToScan, fileSet);
 
             if (!fileSet.Any())
             {
-                string folder = Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8);
-                AppendToSetFrom(folder, fileSet);
+                foldersToScan = new[]
+                {
+                    Path.Combine(programFilesX86Folder, ExternalAnnotationFolders.Resharper8),
+                    Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8)
+                };
+
+                AppendToSetFrom(foldersToScan, fileSet);
             }
 
             return fileSet;
         }
 
-        private static void AppendToSetFrom(string folder, HashSet<string> fileSet)
+        private static void AppendToSetFrom(IEnumerable<string> foldersToScan, HashSet<string> fileSet)
         {
-            if (Directory.Exists(folder))
+            foreach (string folder in foldersToScan)
             {
-                foreach (string path in Directory.EnumerateFiles(folder, "*.xml", SearchOption.AllDirectories))
+                if (Directory.Exists(folder))
                 {
-                    fileSet.Add(path);
+                    foreach (string path in Directory.EnumerateFiles(folder, "*.xml", SearchOption.AllDirectories))
+                    {
+                        fileSet.Add(path);
+                    }
                 }
             }
         }

@@ -205,7 +205,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
                 .OnAssembly(new MemberSourceCodeBuilder()
                     .Using(typeof (ArrayList).Namespace)
                     .InDefaultClass(@"
-                        ArrayList P { get; }
+                        ArrayList P { get; set; }
                     "))
                 .Build();
 

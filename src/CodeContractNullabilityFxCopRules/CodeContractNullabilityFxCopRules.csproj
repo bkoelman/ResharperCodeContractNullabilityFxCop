@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExternalAnnotations\DiskExternalAnnotationsLoader.cs" />
+    <Compile Include="ExternalAnnotations\FolderExternalAnnotationsLoader.cs" />
     <Compile Include="ExternalAnnotations\ExternalAnnotationDocumentParser.cs" />
     <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsCache.cs" />
     <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsMap.cs" />

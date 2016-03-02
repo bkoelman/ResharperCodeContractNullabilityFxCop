@@ -41,7 +41,7 @@ namespace CodeContractNullabilityFxCopRules
             this.appliesToItem = appliesToItem;
 
             ExternalAnnotationsRegistry =
-                new ExtensionPoint<ExternalAnnotationsMap>(DiskExternalAnnotationsLoader.Create);
+                new ExtensionPoint<ExternalAnnotationsMap>(FolderExternalAnnotationsLoader.Create);
         }
 
         [NotNull]

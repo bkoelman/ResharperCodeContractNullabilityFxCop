@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml;
 using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
@@ -17,7 +18,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
     /// derives from such a built-in type, we need to have those definitions available because Resharper reports nullability
     /// annotation as unneeded when a base type is already decorated.
     /// </remarks>
-    public static class DiskExternalAnnotationsLoader
+    public static class FolderExternalAnnotationsLoader
     {
         [NotNull]
         private static readonly string CachePath =
@@ -148,24 +149,48 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         private static IEnumerable<string> EnumerateAnnotationFiles()
         {
             string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            int vsVersion = GetVisualStudioMajorVersion();
 
-            var pathsToTry = new[]
+            var foldersToScan = new[]
             {
-                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2013),
-                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2012),
-                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper9ForVisualStudio2010),
-                Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8)
+                Path.Combine(localAppDataFolder,
+                    string.Format(ExternalAnnotationFolders.Resharper9OrHigher.BuiltIn, vsVersion)),
+                Path.Combine(localAppDataFolder,
+                    string.Format(ExternalAnnotationFolders.Resharper9OrHigher.Extensions, vsVersion))
             };
 
-            foreach (string path in pathsToTry)
+            var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string folder in foldersToScan)
             {
-                if (Directory.Exists(path))
-                {
-                    return Directory.EnumerateFiles(path, "*.xml", SearchOption.AllDirectories);
-                }
+                AppendToSetFrom(folder, fileSet);
             }
 
-            return new string[0];
+            if (!fileSet.Any())
+            {
+                string folder = Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8);
+                AppendToSetFrom(folder, fileSet);
+            }
+
+            return fileSet;
+        }
+
+        private static void AppendToSetFrom(string folder, HashSet<string> fileSet)
+        {
+            if (Directory.Exists(folder))
+            {
+                foreach (string path in Directory.EnumerateFiles(folder, "*.xml", SearchOption.AllDirectories))
+                {
+                    fileSet.Add(path);
+                }
+            }
+        }
+
+        private static int GetVisualStudioMajorVersion()
+        {
+            Assembly devEnvOrFxCopCmd = Assembly.GetEntryAssembly();
+            AssemblyName name = devEnvOrFxCopCmd.GetName();
+            return name.Version.Major;
         }
 
         private static void Compact([NotNull] ExternalAnnotationsMap externalAnnotations)
@@ -201,16 +226,13 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
         private static class ExternalAnnotationFolders
         {
-            public const string Resharper9ForVisualStudio2013 =
-                @"JetBrains\Installations\ReSharperPlatformVs12\ExternalAnnotations";
-
-            public const string Resharper9ForVisualStudio2012 =
-                @"JetBrains\Installations\ReSharperPlatformVs11\ExternalAnnotations";
-
-            public const string Resharper9ForVisualStudio2010 =
-                @"JetBrains\Installations\ReSharperPlatformVs10\ExternalAnnotations";
-
             public const string Resharper8 = @"JetBrains\ReSharper\vAny\packages";
+
+            public static class Resharper9OrHigher
+            {
+                public const string BuiltIn = @"JetBrains\Installations\ReSharperPlatformVs{0}\ExternalAnnotations";
+                public const string Extensions = @"JetBrains\Installations\ReSharperPlatformVs{0}\Extensions";
+            }
         }
     }
 }

@@ -25,3 +25,13 @@ Instead of adding the JetBrains package, you can [put the annotation definitions
 ## Building, Testing, and Debugging
 
 To build, open `ResharperCodeContractNullabilityFxCop.sln` in Visual Studio 2013. Press `Ctrl + A` to run all unit tests. See [How-to-debug.md](src/How-to-debug.md) for debugging instructions.
+
+## Trying out the latest build
+
+After each commit, a new prerelease NuGet package is automatically published to MyGet. To try it out, follow the next steps:
+
+* In Visual Studio: Tools, Options, NuGet Package Manager, Package Sources
+    * Click **+**
+    * Name: **MyGet**, Source: **http://www.myget.org/F/resharpercodecontractnullabilityfxcop**
+    * Click **Update**, **Ok**
+* In Visual Studio, select **MyGet** as package source in the GUI or Package Manager Console.

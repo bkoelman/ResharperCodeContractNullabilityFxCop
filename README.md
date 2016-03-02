@@ -1,6 +1,6 @@
 # Resharper Code Contract Nullability FxCop Rules
 
-[![Build status](https://ci.appveyor.com/api/projects/status/pm2fkhbaip5fqrov?svg=true)](https://ci.appveyor.com/project/bkoelman/resharpercodecontractnullabilityfxcop)
+[![Build status](https://ci.appveyor.com/api/projects/status/pm2fkhbaip5fqrov?svg=true)](https://ci.appveyor.com/project/bkoelman/resharpercodecontractnullabilityfxcop) [![resharpercodecontractnullabilityfxcop MyGet Build Status](https://www.myget.org/BuildSource/Badge/resharpercodecontractnullabilityfxcop?identifier=abf5b05e-e912-4e89-aa6a-adc774d161c1)](https://www.myget.org/)
 
 This Visual Studio analyzer supports you in consequently annotating your codebase with Resharpers nullability attributes. Doing so improves the [nullability analysis engine in Resharper](https://www.jetbrains.com/resharper/help/Code_Analysis__Code_Annotations.html), so `NullReferenceException`s at runtime will become something from the past.
 

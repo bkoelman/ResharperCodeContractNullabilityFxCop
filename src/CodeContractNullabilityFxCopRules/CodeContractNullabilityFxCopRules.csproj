@@ -109,18 +109,11 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <Target Name="GetSemanticVersionFromOutputAssembly">
-    <GetAssemblyIdentity AssemblyFiles="$(OutDir)\$(AssemblyName).dll">
-      <Output TaskParameter="Assemblies" ItemName="assemblyVersionInfo"/>
-    </GetAssemblyIdentity>
     <PropertyGroup>
-      <Pattern>(\d+)\.(\d+).(\d+)</Pattern>
-      <In>%(assemblyVersionInfo.Version)</In>
-      <SemanticVersion>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern)))</SemanticVersion>
+      <In>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs'))</In>
+      <Pattern>\[assembly:\s*AssemblyInformationalVersion\(@?"(?&lt;SemanticVersionString&gt;[0-9A-Za-z-.]+)"\)\]</Pattern>
+      <SemanticVersion>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups["SemanticVersionString"].Value)</SemanticVersion>
     </PropertyGroup>
   </Target>
   <Target Name="GetSemanticVersionFromCurrentTime">

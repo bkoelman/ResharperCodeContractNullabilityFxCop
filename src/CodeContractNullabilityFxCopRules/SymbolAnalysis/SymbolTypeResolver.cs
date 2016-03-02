@@ -21,7 +21,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
                 return symbol.Type;
             }
 
-            if (symbol.Type.FullName == "System.Void")
+            if (symbol.Type.FullName == "System.Void" || symbol.Type.FullName == "System.String")
             {
                 return null;
             }

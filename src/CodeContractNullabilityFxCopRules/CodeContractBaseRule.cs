@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using CodeContractNullabilityFxCopRules.ExternalAnnotations;
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
@@ -28,7 +27,7 @@ namespace CodeContractNullabilityFxCopRules
         private readonly SymbolFactory symbolFactory = new SymbolFactory();
 
         [NotNull]
-        public ExtensionPoint<ExternalAnnotationsMap> ExternalAnnotationsRegistry { get; private set; }
+        public ExtensionPoint<IExternalAnnotationsResolver> ExternalAnnotationsResolver { get; private set; }
 
         protected CodeContractBaseRule([NotNull] string name, [NotNull] string ruleName, bool appliesToItem)
             : base(
@@ -40,8 +39,8 @@ namespace CodeContractNullabilityFxCopRules
             this.ruleName = ruleName;
             this.appliesToItem = appliesToItem;
 
-            ExternalAnnotationsRegistry =
-                new ExtensionPoint<ExternalAnnotationsMap>(FolderExternalAnnotationsLoader.Create);
+            ExternalAnnotationsResolver =
+                new ExtensionPoint<IExternalAnnotationsResolver>(() => new CachingExternalAnnotationsResolver());
         }
 
         [NotNull]
@@ -65,7 +64,10 @@ namespace CodeContractNullabilityFxCopRules
             {
                 // When unable to load external annotations, the rule would likely report lots 
                 // of false positives. This is prevented by letting it throw here and report nothing.
-                var analyzerFactory = new AnalyzerFactory(ExternalAnnotationsRegistry.GetCached(), appliesToItem);
+                IExternalAnnotationsResolver resolver = ExternalAnnotationsResolver.GetCached();
+                resolver.EnsureScanned();
+
+                var analyzerFactory = new AnalyzerFactory(resolver, appliesToItem);
 
                 BaseAnalyzer analyzer = analyzerFactory.CreateFor(symbol);
                 analyzer.Analyze(ReportProblem);

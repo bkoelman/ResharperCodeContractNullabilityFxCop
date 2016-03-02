@@ -1,5 +1,5 @@
 ﻿using System;
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.ExternalAnnotations;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using JetBrains.Annotations;
 
@@ -13,7 +13,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
         [NotNull]
         private readonly GeneratedCodeHeuristics heuristics;
 
-        public FieldAnalyzer([NotNull] FieldSymbol field, [NotNull] ExternalAnnotationsMap externalAnnotations,
+        public FieldAnalyzer([NotNull] FieldSymbol field, [NotNull] IExternalAnnotationsResolver externalAnnotations,
             bool appliesToItem)
             : base(field, externalAnnotations, appliesToItem)
         {

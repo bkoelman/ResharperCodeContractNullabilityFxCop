@@ -1,4 +1,5 @@
-﻿using FxCopUnitTestRunner;
+﻿using CodeContractNullabilityFxCopRules.ExternalAnnotations;
+using FxCopUnitTestRunner;
 using FxCopUnitTestRunner.TestDataBuilders;
 using JetBrains.Annotations;
 
@@ -7,7 +8,8 @@ namespace CodeContractNullabilityFxCopRules.Test.TestDataBuilders
     public class FxCopNullabilityRuleValidatorBuilder : FxCopRuleValidatorBuilder
     {
         [NotNull]
-        private ExternalAnnotationsBuilder externalAnnotationsBuilder = new ExternalAnnotationsBuilder();
+        private IExternalAnnotationsResolver externalAnnotationsResolver =
+            new SimpleExternalAnnotationsResolver(new ExternalAnnotationsBuilder().Build());
 
         public override FxCopRuleValidator Build()
         {
@@ -21,7 +23,7 @@ namespace CodeContractNullabilityFxCopRules.Test.TestDataBuilders
             var nullabilityRule = (CodeContractBaseRule) Rule;
             if (nullabilityRule != null)
             {
-                nullabilityRule.ExternalAnnotationsRegistry.Override(externalAnnotationsBuilder.Build());
+                nullabilityRule.ExternalAnnotationsResolver.Override(externalAnnotationsResolver);
             }
         }
 
@@ -30,7 +32,7 @@ namespace CodeContractNullabilityFxCopRules.Test.TestDataBuilders
         {
             Guard.NotNull(builder, "builder");
 
-            externalAnnotationsBuilder = builder;
+            externalAnnotationsResolver = new SimpleExternalAnnotationsResolver(builder.Build());
             return this;
         }
 

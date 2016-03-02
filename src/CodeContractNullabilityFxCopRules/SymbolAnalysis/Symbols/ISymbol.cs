@@ -18,6 +18,9 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
         [CanBeNull]
         TypeSymbol ContainingType { get; }
 
+        [CanBeNull]
+        string ContainingAssemblyPath { get; }
+
         bool HasCompilerGeneratedAnnotation { get; }
         bool HasDebuggerNonUserCodeAnnotation { get; }
 

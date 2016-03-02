@@ -1,4 +1,4 @@
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.ExternalAnnotations;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using JetBrains.Annotations;
 
@@ -9,8 +9,8 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
     /// </summary>
     public class PropertyAnalyzer : BaseAnalyzer<PropertySymbol>
     {
-        public PropertyAnalyzer([NotNull] PropertySymbol symbol, [NotNull] ExternalAnnotationsMap externalAnnotations,
-            bool appliesToItem)
+        public PropertyAnalyzer([NotNull] PropertySymbol symbol,
+            [NotNull] IExternalAnnotationsResolver externalAnnotations, bool appliesToItem)
             : base(symbol, externalAnnotations, appliesToItem)
         {
         }
@@ -30,8 +30,8 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             PropertySymbol baseMember = Symbol.OverriddenProperty;
             while (baseMember != null)
             {
-                if (baseMember.HasNullabilityAnnotation(AppliesToItem) ||
-                    ExternalAnnotations.Contains(baseMember, AppliesToItem) || HasAnnotationInInterface(baseMember))
+                if (baseMember.HasNullabilityAnnotation(AppliesToItem) || HasExternalAnnotationFor(baseMember) ||
+                    HasAnnotationInInterface(baseMember))
                 {
                     return true;
                 }

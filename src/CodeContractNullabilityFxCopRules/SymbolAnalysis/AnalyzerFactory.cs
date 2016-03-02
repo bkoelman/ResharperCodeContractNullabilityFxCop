@@ -1,5 +1,5 @@
 ﻿using System;
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.ExternalAnnotations;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using CodeContractNullabilityFxCopRules.Utilities;
@@ -13,11 +13,11 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
     public class AnalyzerFactory : ISymbolVisitor<BaseAnalyzer>
     {
         [NotNull]
-        private readonly ExternalAnnotationsMap externalAnnotations;
+        private readonly IExternalAnnotationsResolver externalAnnotations;
 
         private readonly bool appliesToItem;
 
-        public AnalyzerFactory([NotNull] ExternalAnnotationsMap externalAnnotations, bool appliesToItem)
+        public AnalyzerFactory([NotNull] IExternalAnnotationsResolver externalAnnotations, bool appliesToItem)
         {
             Guard.NotNull(externalAnnotations, "externalAnnotations");
 

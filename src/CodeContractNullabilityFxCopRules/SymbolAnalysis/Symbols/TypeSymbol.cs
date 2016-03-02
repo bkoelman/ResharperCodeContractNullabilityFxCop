@@ -57,6 +57,14 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             }
         }
 
+        public string ContainingAssemblyPath
+        {
+            get
+            {
+                return fxCopType.DeclaringModule != null ? fxCopType.DeclaringModule.Location : null;
+            }
+        }
+
         [CanBeNull]
         public TypeSymbol UnboundGenericType
         {

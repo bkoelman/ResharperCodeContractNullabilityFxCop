@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.ExternalAnnotations;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using CodeContractNullabilityFxCopRules.Utilities;
 using JetBrains.Annotations;
@@ -32,18 +32,18 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
         private string uniqueKeyToReportSymbol;
 
         [NotNull]
-        protected ExternalAnnotationsMap ExternalAnnotations { get; private set; }
+        private readonly IExternalAnnotationsResolver externalAnnotations;
 
         protected bool AppliesToItem { get; private set; }
 
-        protected BaseAnalyzer([NotNull] TSymbol symbol, [NotNull] ExternalAnnotationsMap externalAnnotations,
+        protected BaseAnalyzer([NotNull] TSymbol symbol, [NotNull] IExternalAnnotationsResolver externalAnnotations,
             bool appliesToItem)
         {
             Guard.NotNull(symbol, "symbol");
             Guard.NotNull(externalAnnotations, "externalAnnotations");
 
             Symbol = symbol;
-            ExternalAnnotations = externalAnnotations;
+            this.externalAnnotations = externalAnnotations;
             AppliesToItem = appliesToItem;
         }
 
@@ -88,7 +88,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
                 return;
             }
 
-            if (ExternalAnnotations.Contains(Symbol, AppliesToItem))
+            if (HasExternalAnnotationFor(Symbol))
             {
                 return;
             }
@@ -138,8 +138,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
                     if (ifaceMember != null)
                     {
-                        if (ifaceMember.HasNullabilityAnnotation(AppliesToItem) ||
-                            ExternalAnnotations.Contains(ifaceMember, AppliesToItem))
+                        if (ifaceMember.HasNullabilityAnnotation(AppliesToItem) || HasExternalAnnotationFor(ifaceMember))
                         {
                             return true;
                         }
@@ -153,6 +152,11 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
         protected virtual bool HasAnnotationInBaseClass()
         {
             return false;
+        }
+
+        protected bool HasExternalAnnotationFor([NotNull] ISymbol symbol)
+        {
+            return externalAnnotations.HasAnnotationForSymbol(symbol, AppliesToItem);
         }
 
         protected void ReportOnSymbol([NotNull] string uniqueKey)

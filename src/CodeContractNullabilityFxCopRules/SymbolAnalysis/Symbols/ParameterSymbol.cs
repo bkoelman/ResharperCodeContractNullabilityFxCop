@@ -30,11 +30,20 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             }
         }
 
+        [NotNull]
         public TypeSymbol ContainingType
         {
             get
             {
                 return new TypeSymbol(fxCopParameter.DeclaringMethod.DeclaringType);
+            }
+        }
+
+        public string ContainingAssemblyPath
+        {
+            get
+            {
+                return ContainingType.ContainingAssemblyPath;
             }
         }
 

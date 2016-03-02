@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.ExternalAnnotations;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using JetBrains.Annotations;
 
@@ -12,8 +12,8 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
     /// </summary>
     public class ParameterAnalyzer : BaseAnalyzer<ParameterSymbol>
     {
-        public ParameterAnalyzer([NotNull] ParameterSymbol symbol, [NotNull] ExternalAnnotationsMap externalAnnotations,
-            bool appliesToItem)
+        public ParameterAnalyzer([NotNull] ParameterSymbol symbol,
+            [NotNull] IExternalAnnotationsResolver externalAnnotations, bool appliesToItem)
             : base(symbol, externalAnnotations, appliesToItem)
         {
         }
@@ -62,8 +62,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             ParameterSymbol baseParameter = TryGetBaseParameterFor(Symbol);
             while (baseParameter != null)
             {
-                if (baseParameter.HasNullabilityAnnotation(AppliesToItem) ||
-                    ExternalAnnotations.Contains(baseParameter, AppliesToItem) ||
+                if (baseParameter.HasNullabilityAnnotation(AppliesToItem) || HasExternalAnnotationFor(baseParameter) ||
                     HasAnnotationInInterface(baseParameter))
                 {
                     return true;
@@ -111,7 +110,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
                         ParameterSymbol ifaceParameter = ifaceParameters[parameter.ParameterListIndex];
 
                         if (ifaceParameter.HasNullabilityAnnotation(AppliesToItem) ||
-                            ExternalAnnotations.Contains(ifaceParameter, AppliesToItem))
+                            HasExternalAnnotationFor(ifaceParameter))
                         {
                             return true;
                         }

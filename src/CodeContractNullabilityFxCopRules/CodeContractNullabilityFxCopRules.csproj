@@ -123,6 +123,10 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!--
+  <Target Name="BeforeBuild">
+  </Target>
+  -->
   <Target Name="GetSemanticVersionFromOutputAssembly">
     <PropertyGroup>
       <In>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs'))</In>
@@ -142,16 +146,5 @@
     <Exec Command="&quot;$(SolutionDir)packages\NuGet.CommandLine.2.8.6\tools\NuGet.exe&quot; pack CodeContractNullabilityFxCopRules.nuspec -NoPackageAnalysis -OutputDirectory . -version $(SemanticVersion)" WorkingDirectory="$(OutDir)" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
     </Exec>
-  </Target>
-  <Target Name="CopyExternalAnnotations" Condition="'$(BuildingInsideVisualStudio)' != 'true'">
-    <Exec Command="&quot;$(SolutionDir)packages\NuGet.CommandLine.2.8.6\tools\NuGet.exe&quot; install JetBrains.ExternalAnnotations -Version 10.0.15 -OutputDirectory &quot;$(SolutionDir)packages&quot;" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
-    </Exec>
-    <Message Importance="High" Text="Copying External Annotations to: &quot;%LOCALAPPDATA%\JetBrains\Installations\ReSharperPlatformVs14\ExternalAnnotations&quot;" />
-    <Exec Command="xcopy &quot;$(SolutionDir)packages\JetBrains.ExternalAnnotations.10.0.15\DotFiles\ExternalAnnotations\*.xml&quot; &quot;%LOCALAPPDATA%\JetBrains\Installations\ReSharperPlatformVs14\ExternalAnnotations&quot; /s /i /r /y /q" LogStandardErrorAsError="true" ConsoleToMSBuild="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
-    </Exec>
-  </Target>
-  <Target Name="BeforeBuild" DependsOnTargets="CopyExternalAnnotations">
   </Target>
 </Project>

@@ -100,20 +100,15 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
 
         private bool ContainingTypeHasExplicitInterfaceImplementationFor([NotNull] PropertySymbol interfaceProperty)
         {
-            if (ContainingType != null && interfaceProperty.ContainingType != null)
-            {
-                string explicitInterfaceMethodName =
-                    interfaceProperty.ContainingType.GetFullUnmangledNameWithTypeParameters() + "." + Name;
+            string explicitInterfaceMethodName =
+                interfaceProperty.ContainingType.GetFullUnmangledNameWithTypeParameters() + "." + Name;
 
-                return
-                    ContainingType.Members.OfType<PropertySymbol>()
-                        .Any(
-                            m =>
-                                m.Name == explicitInterfaceMethodName &&
-                                    m.fxCopProperty.ParametersMatchStructurally(fxCopProperty.Parameters));
-            }
-
-            return false;
+            return
+                ContainingType.Members.OfType<PropertySymbol>()
+                    .Any(
+                        m =>
+                            m.Name == explicitInterfaceMethodName &&
+                                m.fxCopProperty.ParametersMatchStructurally(fxCopProperty.Parameters));
         }
     }
 }

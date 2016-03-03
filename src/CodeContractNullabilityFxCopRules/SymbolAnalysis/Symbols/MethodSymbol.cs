@@ -59,6 +59,14 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             }
         }
 
+        public bool IsAsync
+        {
+            get
+            {
+                return fxCopMethod.Attributes.Any(HelperForSymbols.IsAsyncStateMachineAttribute);
+            }
+        }
+
         [NotNull]
         [ItemNotNull]
         public IList<ParameterSymbol> Parameters
@@ -117,20 +125,15 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
 
         private bool ContainingTypeHasExplicitInterfaceImplementationFor([NotNull] MethodSymbol interfaceMethod)
         {
-            if (ContainingType != null && interfaceMethod.ContainingType != null)
-            {
-                string explicitInterfaceMethodName =
-                    interfaceMethod.ContainingType.GetFullUnmangledNameWithTypeParameters() + "." + Name;
+            string explicitInterfaceMethodName =
+                interfaceMethod.ContainingType.GetFullUnmangledNameWithTypeParameters() + "." + Name;
 
-                return
-                    ContainingType.Members.OfType<MethodSymbol>()
-                        .Any(
-                            m =>
-                                m.Name == explicitInterfaceMethodName &&
-                                    m.fxCopMethod.ParametersMatchStructurally(fxCopMethod.Parameters));
-            }
-
-            return false;
+            return
+                ContainingType.Members.OfType<MethodSymbol>()
+                    .Any(
+                        m =>
+                            m.Name == explicitInterfaceMethodName &&
+                                m.fxCopMethod.ParametersMatchStructurally(fxCopMethod.Parameters));
         }
     }
 }

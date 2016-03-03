@@ -36,6 +36,13 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
             return attribute.Type.Name.Name == "DebuggerNonUserCodeAttribute";
         }
 
+        public static bool IsAsyncStateMachineAttribute([NotNull] AttributeNode attribute)
+        {
+            Guard.NotNull(attribute, "attribute");
+
+            return attribute.Type.Name.Name == "AsyncStateMachineAttribute";
+        }
+
         public static bool IsResharperConditionalAttribute([NotNull] AttributeNode attribute)
         {
             Guard.NotNull(attribute, "attribute");

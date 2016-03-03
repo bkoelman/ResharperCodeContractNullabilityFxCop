@@ -14,8 +14,7 @@ namespace CodeContractNullabilityFxCopRules.Utilities
         [DebuggerStepThrough]
         public static void NotNull<T>([CanBeNull] [NoEnumeration] T value, [NotNull] [InvokerParameterName] string name)
         {
-            // ReSharper disable once CompareNonConstrainedGenericWithNull
-            if (value == null)
+            if (ReferenceEquals(value, null))
             {
                 throw new ArgumentNullException(name);
             }

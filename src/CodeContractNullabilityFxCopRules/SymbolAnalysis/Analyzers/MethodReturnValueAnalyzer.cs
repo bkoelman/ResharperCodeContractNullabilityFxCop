@@ -27,7 +27,12 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
                 return false;
             }
 
-            if (Symbol.ContainingType != null && Symbol.ContainingType.IsOrDerivesFrom("System.Delegate"))
+            if (!AppliesToItem && Symbol.IsAsync)
+            {
+                return false;
+            }
+
+            if (Symbol.ContainingType.IsOrDerivesFrom("System.Delegate"))
             {
                 return false;
             }

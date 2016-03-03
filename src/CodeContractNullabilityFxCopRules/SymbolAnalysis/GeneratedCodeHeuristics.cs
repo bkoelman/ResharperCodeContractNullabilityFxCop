@@ -17,8 +17,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis
         {
             get
             {
-                return field.ContainingType != null &&
-                    field.ContainingType.IsOrDerivesFrom("System.Windows.Forms.Control");
+                return field.ContainingType.IsOrDerivesFrom("System.Windows.Forms.Control");
             }
         }
 

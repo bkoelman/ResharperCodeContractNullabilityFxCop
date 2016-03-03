@@ -277,7 +277,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
-        public void When_method_is_async_void_it_must_be_skipped()
+        public void When_async_method_returns_void_it_must_be_skipped()
         {
             // Arrange
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
@@ -297,7 +297,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
-        public void When_method_is_async_task_it_must_be_reported()
+        public void When_async_method_returns_task_it_must_be_skipped()
         {
             // Arrange
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
@@ -313,12 +313,11 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidationResult result = validator.Execute();
 
             // Assert
-            result.Problems.Should().HaveCount(1);
-            result.Problems[0].Resolution.Name.Should().Be(NullabilityRule.RuleName);
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
         }
 
         [Test]
-        public void When_method_is_async_generic_task_it_must_be_reported()
+        public void When_async_method_returns_generic_task_it_must_be_skipped()
         {
             // Arrange
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
@@ -327,6 +326,47 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
                     .Using(typeof (Task<>).Namespace)
                     .InDefaultClass(@"
                         async Task<string> M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
+        public void When_method_return_value_is_task_it_must_be_reported()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<NullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof (Task).Namespace)
+                    .InDefaultClass(@"
+                        Task M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.Problems.Should().HaveCount(1);
+            result.Problems[0].Resolution.Name.Should().Be(NullabilityRule.RuleName);
+        }
+
+        [Test]
+        public void When_method_return_value_is_generic_task_it_must_be_reported()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<NullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof (Task<>).Namespace)
+                    .InDefaultClass(@"
+                        Task<string> M() { throw new NotImplementedException(); }
                     "))
                 .Build();
 

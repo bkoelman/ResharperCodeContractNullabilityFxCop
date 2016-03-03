@@ -129,7 +129,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
             // be decorated when the class also contains an explicit interface implementation.
 
             var member = symbol as MemberSymbol;
-            if (member != null && member.ContainingType != null)
+            if (member != null)
             {
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (TypeSymbol iface in member.ContainingType.Interfaces)

@@ -19,6 +19,26 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
     internal class MethodReturnValueCollectionSpecs
     {
         [Test]
+        public void When_method_returns_void_it_must_be_skipped()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof(IList<>).Namespace)
+                    .InDefaultClass(@"
+                        void M() { }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
         public void When_return_value_is_annotated_with_item_not_nullable_it_must_be_skipped()
         {
             // Arrange
@@ -259,6 +279,107 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
 
             // Assert
             result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
+        public void When_async_method_returns_void_it_must_be_skipped()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .InDefaultClass(@"
+                        async void M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
+        public void When_async_method_returns_task_it_must_be_skipped()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof(Task).Namespace)
+                    .InDefaultClass(@"
+                        async Task M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
+        public void When_async_method_returns_generic_task_it_must_be_reported()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof(Task<>).Namespace)
+                    .InDefaultClass(@"
+                        async Task<string> M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.Problems.Should().HaveCount(1);
+            result.Problems[0].Resolution.Name.Should().Be(ItemNullabilityRule.RuleName);
+        }
+
+        [Test]
+        public void When_method_return_value_is_task_it_must_be_skipped()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof(Task).Namespace)
+                    .InDefaultClass(@"
+                        Task M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
+        }
+
+        [Test]
+        public void When_method_return_value_is_generic_task_it_must_be_reported()
+        {
+            // Arrange
+            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
+                .ForRule<ItemNullabilityRule>()
+                .OnAssembly(new MemberSourceCodeBuilder()
+                    .Using(typeof(Task<>).Namespace)
+                    .InDefaultClass(@"
+                        Task<string> M() { throw new NotImplementedException(); }
+                    "))
+                .Build();
+
+            // Act
+            FxCopRuleValidationResult result = validator.Execute();
+
+            // Assert
+            result.Problems.Should().HaveCount(1);
+            result.Problems[0].Resolution.Name.Should().Be(ItemNullabilityRule.RuleName);
         }
 
         [Test]
@@ -531,27 +652,6 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
 
             // Assert
             result.ProblemText.Should().Be(FxCopRuleValidationResult.NoProblemsText);
-        }
-
-        [Test]
-        public void When_return_value_type_is_generic_task_it_must_be_reported()
-        {
-            // Arrange
-            FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
-                .ForRule<ItemNullabilityRule>()
-                .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof (Task<>).Namespace)
-                    .InDefaultClass(@"
-                        Task<string> M() { throw new NotImplementedException(); }
-                    "))
-                .Build();
-
-            // Act
-            FxCopRuleValidationResult result = validator.Execute();
-
-            // Assert
-            result.Problems.Should().HaveCount(1);
-            result.Problems[0].Resolution.Name.Should().Be(ItemNullabilityRule.RuleName);
         }
 
         [Test]

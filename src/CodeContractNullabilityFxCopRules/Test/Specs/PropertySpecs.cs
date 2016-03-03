@@ -257,7 +257,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
         }
 
         [Test]
-        public void When_indexer_property_type_is_reference_type_it_must_be_reported_and_fixed()
+        public void When_indexer_property_type_is_reference_type_it_must_be_reported()
         {
             // Arrange
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()

@@ -25,7 +25,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
                 return false;
             }
 
-            if (Symbol.ContainingType != null && Symbol.ContainingType.HasCompilerGeneratedAnnotation)
+            if (Symbol.ContainingType.HasCompilerGeneratedAnnotation)
             {
                 return false;
             }
@@ -96,24 +96,21 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Analyzers
 
         protected override bool HasAnnotationInInterface(ParameterSymbol parameter)
         {
-            if (parameter.ContainingType != null)
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (TypeSymbol iface in parameter.ContainingType.Interfaces)
             {
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (TypeSymbol iface in parameter.ContainingType.Interfaces)
+                MemberSymbol ifaceMember =
+                    iface.Members.FirstOrDefault(parameter.ContainingMethod.IsImplementationForInterfaceMember);
+
+                if (ifaceMember != null)
                 {
-                    MemberSymbol ifaceMember =
-                        iface.Members.FirstOrDefault(parameter.ContainingMethod.IsImplementationForInterfaceMember);
+                    IList<ParameterSymbol> ifaceParameters = GetParametersFor(ifaceMember);
+                    ParameterSymbol ifaceParameter = ifaceParameters[parameter.ParameterListIndex];
 
-                    if (ifaceMember != null)
+                    if (ifaceParameter.HasNullabilityAnnotation(AppliesToItem) ||
+                        HasExternalAnnotationFor(ifaceParameter))
                     {
-                        IList<ParameterSymbol> ifaceParameters = GetParametersFor(ifaceMember);
-                        ParameterSymbol ifaceParameter = ifaceParameters[parameter.ParameterListIndex];
-
-                        if (ifaceParameter.HasNullabilityAnnotation(AppliesToItem) ||
-                            HasExternalAnnotationFor(ifaceParameter))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }

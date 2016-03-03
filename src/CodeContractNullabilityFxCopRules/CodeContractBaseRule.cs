@@ -10,7 +10,7 @@ using Microsoft.FxCop.Sdk;
 namespace CodeContractNullabilityFxCopRules
 {
     /// <summary>
-    /// Base FcXop rule implementation for nullability analysis.
+    /// Base FxCop rule implementation for nullability analysis.
     /// </summary>
     public abstract class CodeContractBaseRule : BaseIntrospectionRule
     {

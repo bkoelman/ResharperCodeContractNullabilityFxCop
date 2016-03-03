@@ -119,7 +119,12 @@ function Ensure-Conditional-Compilation-Symbol ($properties) {
     $conditionals = $properties.Item('DefineConstants').Value
     $conditionalArray = $conditionals.Split('; ',  [System.StringSplitOptions]::RemoveEmptyEntries)
     if (!$conditionalArray.Contains('JETBRAINS_ANNOTATIONS')) {
-        $properties.Item('DefineConstants').Value = $conditionals + ';JETBRAINS_ANNOTATIONS'
+        if ($conditionals) {
+			$properties.Item('DefineConstants').Value = $conditionals + ';JETBRAINS_ANNOTATIONS'
+		}
+		else {
+			$properties.Item('DefineConstants').Value = 'JETBRAINS_ANNOTATIONS'
+		}
         Write-Host "Added 'JETBRAINS_ANNOTATIONS' conditional compilation symbol."
     }
 }

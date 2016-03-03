@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Xml;
 using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
+using CodeContractNullabilityFxCopRules.Utilities;
 using JetBrains.Annotations;
+using MsgPack.Serialization;
 
 namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 {
@@ -23,7 +24,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         [NotNull]
         private static readonly string CachePath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                @"CodeContractNullabilityAnalyzer\external-annotations-cache.xml");
+                @"ResharperCodeContractNullabilityFxCop\external-annotations.cache");
 
         [NotNull]
         private static readonly object LockObject = new object();
@@ -62,7 +63,10 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
                 if (cached == null || cached.LastWriteTimeUtc < highestLastWriteTimeUtcOnDisk)
                 {
-                    cached = ScanForMemberExternalAnnotations();
+                    using (new CodeTimer("ExternalAnnotationsCache:Create"))
+                    {
+                        cached = ScanForMemberExternalAnnotations();
+                    }
                     SaveToDisk(cached);
                 }
 
@@ -77,10 +81,14 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             {
                 if (File.Exists(CachePath))
                 {
-                    var serializer = new DataContractSerializer(typeof (ExternalAnnotationsCache));
+                    MessagePackSerializer<ExternalAnnotationsCache> serializer =
+                        SerializationContext.Default.GetSerializer<ExternalAnnotationsCache>();
                     using (FileStream stream = File.OpenRead(CachePath))
                     {
-                        return (ExternalAnnotationsCache) serializer.ReadObject(stream);
+                        using (new CodeTimer("ExternalAnnotationsCache:Read"))
+                        {
+                            return serializer.Unpack(stream);
+                        }
                     }
                 }
             }
@@ -96,23 +104,30 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
         private static DateTime GetHighestLastWriteTimeUtc()
         {
-            var recorder = new HighestLastWriteTimeUtcRecorder();
-            foreach (string path in EnumerateAnnotationFiles())
+            using (new CodeTimer("ExternalAnnotationsCache:Scan"))
             {
-                recorder.VisitFile(path);
-            }
+                var recorder = new HighestLastWriteTimeUtcRecorder();
+                foreach (string path in EnumerateAnnotationFiles())
+                {
+                    recorder.VisitFile(path);
+                }
 
-            return recorder.HighestLastWriteTimeUtc;
+                return recorder.HighestLastWriteTimeUtc;
+            }
         }
 
         private static void SaveToDisk([NotNull] ExternalAnnotationsCache cache)
         {
             EnsureDirectoryExists();
 
-            var serializer = new DataContractSerializer(typeof (ExternalAnnotationsCache));
+            MessagePackSerializer<ExternalAnnotationsCache> serializer =
+                SerializationContext.Default.GetSerializer<ExternalAnnotationsCache>();
             using (FileStream stream = File.Create(CachePath))
             {
-                serializer.WriteObject(stream, cache);
+                using (new CodeTimer("ExternalAnnotationsCache:Write"))
+                {
+                    serializer.Pack(stream, cache);
+                }
             }
         }
 

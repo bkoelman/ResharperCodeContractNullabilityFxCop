@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Threading;
 using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using CodeContractNullabilityFxCopRules.Utilities;
@@ -15,8 +17,11 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
     /// </summary>
     public class CachingExternalAnnotationsResolver : IExternalAnnotationsResolver
     {
-        [CanBeNull]
-        private ExternalAnnotationsMap globalCache;
+        [NotNull]
+        [ItemNotNull]
+        private static readonly Lazy<ExternalAnnotationsMap> GlobalCache =
+            new Lazy<ExternalAnnotationsMap>(FolderExternalAnnotationsLoader.Create,
+                LazyThreadSafetyMode.ExecutionAndPublication);
 
         [NotNull]
         private readonly ConcurrentDictionary<string, AssemblyCacheEntry> assemblyCache =
@@ -24,10 +29,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
         public void EnsureScanned()
         {
-            if (globalCache == null)
-            {
-                globalCache = FolderExternalAnnotationsLoader.Create();
-            }
+            ExternalAnnotationsMap dummy = GlobalCache.Value;
         }
 
         public bool HasAnnotationForSymbol(ISymbol symbol, bool appliesToItem)
@@ -40,7 +42,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
         private bool HasAnnotationInGlobalCache([NotNull] ISymbol symbol, bool appliesToItem)
         {
-            return globalCache != null && globalCache.Contains(symbol, appliesToItem);
+            return GlobalCache.Value.Contains(symbol, appliesToItem);
         }
 
         private bool HasAnnotationInSideBySideFile([NotNull] ISymbol symbol, bool appliesToItem)

@@ -25,7 +25,6 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 @"CodeContractNullabilityAnalyzer\external-annotations-cache.xml");
 
-        // Prevents IOException (process cannot access file) when host executes analyzers in parallel.
         [NotNull]
         private static readonly object LockObject = new object();
 
@@ -45,12 +44,15 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                 throw new Exception(string.Format("Failed to load Resharper external annotations: {0}", ex.Message), ex);
             }
 
-            throw new Exception("Failed to load Resharper external annotations.");
+            IEnumerable<string> folderSet = GetFoldersToScan(false).Concat(GetFoldersToScan(true));
+            string folders = string.Join(";", folderSet.Select(folder => "\"" + folder + "\""));
+            throw new Exception("Failed to load Resharper external annotations. Scanned folders: " + folders);
         }
 
         [NotNull]
         private static ExternalAnnotationsMap GetCached()
         {
+            // The lock prevents IOException (process cannot access file) when host executes analyzers in parallel.
             lock (LockObject)
             {
                 ExternalAnnotationsCache cached = TryGetCacheFromDisk();
@@ -148,11 +150,43 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
         [ItemNotNull]
         private static IEnumerable<string> EnumerateAnnotationFiles()
         {
+            ICollection<string> fileSet = EnumerateAnnotationFilesForResharperVersion(false);
+
+            if (!fileSet.Any())
+            {
+                fileSet = EnumerateAnnotationFilesForResharperVersion(true);
+            }
+
+            return fileSet;
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private static ICollection<string> EnumerateAnnotationFilesForResharperVersion(bool forResharper8)
+        {
+            IEnumerable<string> foldersToScan = GetFoldersToScan(forResharper8);
+            return GetFilesInFolders(foldersToScan);
+        }
+
+        [NotNull]
+        [ItemNotNull]
+        private static IEnumerable<string> GetFoldersToScan(bool forResharper8)
+        {
             string programFilesX86Folder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             string localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            if (forResharper8)
+            {
+                return new[]
+                {
+                    Path.Combine(programFilesX86Folder, ExternalAnnotationFolders.Resharper8),
+                    Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8)
+                };
+            }
+
             int vsVersion = GetVisualStudioMajorVersion();
 
-            var foldersToScan = new[]
+            return new[]
             {
                 Path.Combine(programFilesX86Folder,
                     string.Format(ExternalAnnotationFolders.Resharper9OrHigher.BuiltIn, vsVersion)),
@@ -163,27 +197,20 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                 Path.Combine(localAppDataFolder,
                     string.Format(ExternalAnnotationFolders.Resharper9OrHigher.Extensions, vsVersion))
             };
-
-            var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            AppendToSetFrom(foldersToScan, fileSet);
-
-            if (!fileSet.Any())
-            {
-                foldersToScan = new[]
-                {
-                    Path.Combine(programFilesX86Folder, ExternalAnnotationFolders.Resharper8),
-                    Path.Combine(localAppDataFolder, ExternalAnnotationFolders.Resharper8)
-                };
-
-                AppendToSetFrom(foldersToScan, fileSet);
-            }
-
-            return fileSet;
         }
 
-        private static void AppendToSetFrom(IEnumerable<string> foldersToScan, HashSet<string> fileSet)
+        private static int GetVisualStudioMajorVersion()
         {
-            foreach (string folder in foldersToScan)
+            Assembly devEnvOrFxCopCmd = Assembly.GetEntryAssembly();
+            AssemblyName name = devEnvOrFxCopCmd.GetName();
+            return name.Version.Major;
+        }
+
+        private static ICollection<string> GetFilesInFolders(IEnumerable<string> folders)
+        {
+            var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string folder in folders)
             {
                 if (Directory.Exists(folder))
                 {
@@ -193,13 +220,8 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                     }
                 }
             }
-        }
 
-        private static int GetVisualStudioMajorVersion()
-        {
-            Assembly devEnvOrFxCopCmd = Assembly.GetEntryAssembly();
-            AssemblyName name = devEnvOrFxCopCmd.GetName();
-            return name.Version.Major;
+            return fileSet;
         }
 
         private static void Compact([NotNull] ExternalAnnotationsMap externalAnnotations)

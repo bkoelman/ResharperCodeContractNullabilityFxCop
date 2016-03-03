@@ -68,6 +68,7 @@
     <Compile Include="ExternalAnnotations\FolderExternalAnnotationsLoader.cs" />
     <Compile Include="ExternalAnnotations\ExternalAnnotationDocumentParser.cs" />
     <Compile Include="ExternalAnnotations\IExternalAnnotationsResolver.cs" />
+    <Compile Include="ExternalAnnotations\MissingExternalAnnotationsException.cs" />
     <Compile Include="ExternalAnnotations\SimpleExternalAnnotationsResolver.cs" />
     <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsCache.cs" />
     <Compile Include="ExternalAnnotations\Storage\ExternalAnnotationsMap.cs" />

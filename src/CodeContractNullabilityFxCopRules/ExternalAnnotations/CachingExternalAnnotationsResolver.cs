@@ -29,6 +29,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 
         public void EnsureScanned()
         {
+            // ReSharper disable once UnusedVariable
             ExternalAnnotationsMap dummy = GlobalCache.Value;
         }
 

@@ -86,6 +86,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CodeAnnotations.cs">
+      <Link>CodeAnnotations.cs</Link>
+    </Compile>
     <Compile Include="GitHubIssueAttribute.cs" />
     <Compile Include="Specs\Bugfixes.cs" />
     <Compile Include="TestDataBuilders\ClassSourceCodeBuilder.cs" />

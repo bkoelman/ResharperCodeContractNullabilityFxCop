@@ -25,7 +25,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
                 .ForRule<ItemNullabilityRule>()
                 .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof(IList<>).Namespace)
+                    .Using(typeof (IList<>).Namespace)
                     .InDefaultClass(@"
                         void M() { }
                     "))
@@ -307,7 +307,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
                 .ForRule<ItemNullabilityRule>()
                 .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof(Task).Namespace)
+                    .Using(typeof (Task).Namespace)
                     .InDefaultClass(@"
                         async Task M() { throw new NotImplementedException(); }
                     "))
@@ -327,7 +327,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
                 .ForRule<ItemNullabilityRule>()
                 .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof(Task<>).Namespace)
+                    .Using(typeof (Task<>).Namespace)
                     .InDefaultClass(@"
                         async Task<string> M() { throw new NotImplementedException(); }
                     "))
@@ -348,7 +348,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
                 .ForRule<ItemNullabilityRule>()
                 .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof(Task).Namespace)
+                    .Using(typeof (Task).Namespace)
                     .InDefaultClass(@"
                         Task M() { throw new NotImplementedException(); }
                     "))
@@ -368,7 +368,7 @@ namespace CodeContractNullabilityFxCopRules.Test.Specs
             FxCopRuleValidator validator = new FxCopNullabilityRuleValidatorBuilder()
                 .ForRule<ItemNullabilityRule>()
                 .OnAssembly(new MemberSourceCodeBuilder()
-                    .Using(typeof(Task<>).Namespace)
+                    .Using(typeof (Task<>).Namespace)
                     .InDefaultClass(@"
                         Task<string> M() { throw new NotImplementedException(); }
                     "))

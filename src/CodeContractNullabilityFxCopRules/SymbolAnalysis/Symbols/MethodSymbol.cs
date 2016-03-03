@@ -93,6 +93,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             return visitor.VisitMethod(this);
         }
 
+        [NotNull]
         public MethodSymbol AsUnboundGenericMethodOrThis()
         {
             Method template = fxCopMethod.Template;

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="CodeAnalysis" ToolsVersion="12.0">
+  <RuleHintPaths>
+    <Path>packages\ResharperCodeContractNullabilityFxCop.1.0.2\tools\CodeContractNullabilityFxCopRules.dll</Path>
+  </RuleHintPaths>
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="RNUL" Action="Warning" />
+    <Rule Id="RINUL" Action="Warning" />
+  </Rules>
+</RuleSet>

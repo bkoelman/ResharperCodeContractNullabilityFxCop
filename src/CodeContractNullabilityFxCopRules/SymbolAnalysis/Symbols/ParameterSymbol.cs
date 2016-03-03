@@ -103,6 +103,7 @@ namespace CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols
             return visitor.VisitParameter(this);
         }
 
+        [NotNull]
         public ParameterSymbol AsUnboundGenericParameterOrThis()
         {
             Method template = fxCopParameter.DeclaringMethod.Template;

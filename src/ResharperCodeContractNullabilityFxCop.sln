@@ -31,7 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F3F81D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{91AE5202-5E0F-4F5D-917C-6D1B43DF8047}"
 	ProjectSection(SolutionItems) = preProject
-		How-to-debug.txt = How-to-debug.txt
+		CodeAnalysis.ruleset = CodeAnalysis.ruleset
+		How-to-debug.md = How-to-debug.md
 	EndProjectSection
 EndProject
 Global

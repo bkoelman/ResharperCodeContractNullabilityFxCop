@@ -206,7 +206,9 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             return name.Version.Major;
         }
 
-        private static ICollection<string> GetFilesInFolders(IEnumerable<string> folders)
+        [NotNull]
+        [ItemNotNull]
+        private static ICollection<string> GetFilesInFolders([NotNull] [ItemNotNull] IEnumerable<string> folders)
         {
             var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 

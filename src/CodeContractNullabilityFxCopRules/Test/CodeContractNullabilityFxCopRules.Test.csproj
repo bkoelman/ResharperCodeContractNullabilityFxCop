@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="GitHubIssueAttribute.cs" />
     <Compile Include="Specs\Bugfixes.cs" />
+    <Compile Include="Specs\MsgPackSpecs.cs" />
     <Compile Include="TestDataBuilders\ClassSourceCodeBuilder.cs" />
     <Compile Include="TestDataBuilders\FxCopNullabilityRuleValidatorBuilder.cs" />
     <Compile Include="TestDataBuilders\MemberSourceCodeBuilder.cs" />

@@ -6,7 +6,6 @@ using System.Reflection;
 using CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage;
 using CodeContractNullabilityFxCopRules.Utilities;
 using JetBrains.Annotations;
-using MsgPack.Serialization;
 
 namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
 {
@@ -85,13 +84,12 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             {
                 if (File.Exists(CachePath))
                 {
-                    MessagePackSerializer<ExternalAnnotationsCache> serializer =
-                        SerializationContext.Default.GetSerializer<ExternalAnnotationsCache>();
                     using (FileStream stream = File.OpenRead(CachePath))
                     {
                         using (new CodeTimer("ExternalAnnotationsCache:Read"))
                         {
-                            ExternalAnnotationsCache result = serializer.Unpack(stream);
+                            var service = new MsgPackSerializationService();
+                            var result = service.ReadObject<ExternalAnnotationsCache>(stream);
 
                             if (result.ExternalAnnotations.Any())
                             {
@@ -136,13 +134,12 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
             {
                 EnsureDirectoryExists();
 
-                MessagePackSerializer<ExternalAnnotationsCache> serializer =
-                    SerializationContext.Default.GetSerializer<ExternalAnnotationsCache>();
                 using (FileStream stream = File.Create(CachePath))
                 {
                     using (new CodeTimer("ExternalAnnotationsCache:Write"))
                     {
-                        serializer.Pack(stream, cache);
+                        var service = new MsgPackSerializationService();
+                        service.WriteObject(cache, stream);
                     }
                 }
             }

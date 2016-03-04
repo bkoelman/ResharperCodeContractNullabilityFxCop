@@ -64,6 +64,7 @@
       <Link>CodeAnnotations.cs</Link>
     </Compile>
     <Compile Include="ExternalAnnotations\AssemblyExternalAnnotationsLoader.cs" />
+    <Compile Include="ExternalAnnotations\MsgPackSerializationService.cs" />
     <Compile Include="ExternalAnnotations\CachingExternalAnnotationsResolver.cs" />
     <Compile Include="ExternalAnnotations\FolderExternalAnnotationsLoader.cs" />
     <Compile Include="ExternalAnnotations\ExternalAnnotationDocumentParser.cs" />
@@ -124,6 +125,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\packages\MsgPack.Cli.0.6.8\lib\net40-client\MsgPack.dll">
+      <Link>MsgPack.dll</Link>
+    </EmbeddedResource>
     <Content Include="Properties\CodeAnalysisRulesPlaceHolder.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -153,4 +157,7 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
     </Exec>
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>del "$(TargetDir)MsgPack.dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

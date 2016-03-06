@@ -156,10 +156,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="DisableCodeAnalysisOnMyGetBuild" BeforeTargets="RunCodeAnalysis">
-    <!-- MyGet Build Services currently does not have FxCop assemblies installed, so skip running CodeAnalysis -->
-    <CreateProperty Value="false">
-      <Output TaskParameter="Value" PropertyName="RunCodeAnalysisOnThisProject" Condition="'$(BuildRunner)'=='MyGet'"></Output>
-    </CreateProperty>
-  </Target>
 </Project>

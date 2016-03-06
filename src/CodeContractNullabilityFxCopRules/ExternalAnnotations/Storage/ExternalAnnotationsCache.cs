@@ -8,8 +8,8 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage
     /// <summary>
     /// Represents the external annotations cache file, stored in compact form.
     /// </summary>
-    [DataContract(Namespace = CacheNamespace)]
     [Serializable]
+    [DataContract(Namespace = CacheNamespace)]
     public class ExternalAnnotationsCache
     {
         internal const string CacheNamespace = "CodeContractNullability";

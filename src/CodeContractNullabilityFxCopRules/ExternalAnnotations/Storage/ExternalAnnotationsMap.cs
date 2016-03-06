@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using CodeContractNullabilityFxCopRules.SymbolAnalysis.Symbols;
 using CodeContractNullabilityFxCopRules.Utilities;
@@ -9,10 +10,20 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage
     /// <summary>
     /// Data storage for external annotations.
     /// </summary>
+    [Serializable]
     [CollectionDataContract(Name = "annotations", ItemName = "e", KeyName = "k", ValueName = "v",
         Namespace = ExternalAnnotationsCache.CacheNamespace)]
     public class ExternalAnnotationsMap : Dictionary<string, MemberNullabilityInfo>
     {
+        public ExternalAnnotationsMap()
+        {
+        }
+
+        protected ExternalAnnotationsMap([NotNull] SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
         public bool Contains<TSymbol>([NotNull] TSymbol symbol, bool appliesToItem) where TSymbol : class, ISymbol
         {
             Guard.NotNull(symbol, "symbol");

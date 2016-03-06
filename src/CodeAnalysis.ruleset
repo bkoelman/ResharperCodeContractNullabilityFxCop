@@ -3,8 +3,9 @@
   <RuleHintPaths>
     <Path>packages\ResharperCodeContractNullabilityFxCop.1.0.3\tools\CodeContractNullabilityFxCopRules.dll</Path>
   </RuleHintPaths>
+  <Include Path="minimumrecommendedrules.ruleset" Action="Default" />
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
-    <Rule Id="RNUL" Action="Warning" />
     <Rule Id="RINUL" Action="Warning" />
+    <Rule Id="RNUL" Action="Warning" />
   </Rules>
 </RuleSet>

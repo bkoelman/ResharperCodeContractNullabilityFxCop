@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using CodeContractNullabilityFxCopRules.Utilities;
 using JetBrains.Annotations;
 
@@ -7,6 +8,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations.Storage
     /// <summary>
     /// Data storage for external annotations.
     /// </summary>
+    [Serializable]
     [DataContract(Name = "i", Namespace = ExternalAnnotationsCache.CacheNamespace)]
     public class MemberNullabilityInfo
     {

@@ -42,5 +42,5 @@ using System.Runtime.InteropServices;
 // NOTE: Also update in CodeContractNullabilityFxCopRules.nuspec
 // =====
 
-[assembly: AssemblyVersion("1.0.2")]
-[assembly: AssemblyInformationalVersion("1.0.2")]
+[assembly: AssemblyVersion("1.0.3")]
+[assembly: AssemblyInformationalVersion("1.0.3")]

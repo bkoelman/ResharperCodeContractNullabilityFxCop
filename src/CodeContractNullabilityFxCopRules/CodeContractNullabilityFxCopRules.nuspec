@@ -15,7 +15,11 @@
       Visual Studio 2013/2012/2010 and Resharper v8 or higher to use this analyzer. See package
       "ResharperCodeContractNullability" if you use Visual Studio 2015.
     </description>
-    <releaseNotes>Bugfixes in installer, caching and reporting correctness.</releaseNotes>
+    <releaseNotes>
+      Improved support for External Annotation files (side-by-side and Resharper Extensions); support
+      Resharper installation in 'All Users' mode; bugfixes in reporting correctness (async, strings in PCL); fixed a
+      few potential race conditions; fixed installer issue in Visual Basic projects; performance optimalizations.
+    </releaseNotes>
     <language>en-us</language>
     <tags>resharper code contracts annotations nullability fxcop canbenull notnull itemcanbenull itemnotnull</tags>
   </metadata>

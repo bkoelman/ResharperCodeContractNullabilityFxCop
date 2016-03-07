@@ -64,7 +64,7 @@ namespace CodeContractNullabilityFxCopRules.ExternalAnnotations
                     ? GetHighestLastWriteTimeUtc()
                     : DateTime.MinValue;
 
-                if (cached == null || cached.LastWriteTimeUtc < highestLastWriteTimeUtcOnDisk)
+                if (cached == null || cached.LastWriteTimeUtc != highestLastWriteTimeUtcOnDisk)
                 {
                     using (new CodeTimer("ExternalAnnotationsCache:Create"))
                     {

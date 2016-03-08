@@ -14,7 +14,6 @@ namespace CodeContractNullabilityFxCopRules.Utilities
         where TInterface : class
     {
         [NotNull]
-        [ItemNotNull]
         private readonly Func<TInterface> createDefaultInstanceFactory;
 
         [CanBeNull]

@@ -6,7 +6,7 @@ This Visual Studio analyzer supports you in consequently annotating your codebas
 
 ## Get started
 
-* You need [Visual Studio](https://www.visualstudio.com/) 2013 (or lower) and [Resharper](https://www.jetbrains.com/resharper/) v8 or higher to use this analyzer. See [here](https://github.com/bkoelman/ResharperCodeContractNullability) if you use Visual Studio 2015.
+* You need [Visual Studio](https://www.visualstudio.com/) 2013 (or lower) and [Resharper](https://www.jetbrains.com/resharper/) v8 or higher to use this analyzer. See [here](https://github.com/bkoelman/ResharperCodeContractNullability) if you use Visual Studio 2015 or 2017.
 
 * Activate the solution configuration in which you want to install (Debug/Release)
 

@@ -24,7 +24,7 @@ Instead of adding the JetBrains package, you can [put the annotation definitions
 
 ## Building, Testing, and Debugging
 
-To build, open `ResharperCodeContractNullabilityFxCop.sln` in Visual Studio 2013. Press `Ctrl + A` to run all unit tests. See [How-to-debug.md](src/How-to-debug.md) for debugging instructions.
+To build, open `ResharperCodeContractNullabilityFxCop.sln` in Visual Studio 2013. Press `Ctrl + R, A` to run all unit tests. See [How-to-debug.md](src/How-to-debug.md) for debugging instructions.
 
 ## Trying out the latest build
 

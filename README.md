@@ -28,18 +28,19 @@ To build, open `ResharperCodeContractNullabilityFxCop.sln` in Visual Studio 2013
 
 ## Trying out the latest build
 
-After each commit, a new prerelease NuGet package is automatically published to [MyGet](http://www.myget.org). To try it out, follow the next steps:
+After each commit, a new prerelease NuGet package is automatically published to AppVeyor at https://ci.appveyor.com/project/bkoelman/resharpercodecontractnullabilityfxcop/build/artifacts. To try it out, follow the next steps:
 
 * In Visual Studio: **Tools**, **Options**, **NuGet Package Manager**, **Package Sources**
     * Click **+**
-    * Name: **MyGet**, Source: **http://www.myget.org/F/resharpercodecontractnullabilityfxcop**
+    * Name: **AppVeyor ResharperCodeContractNullabilityFxCop**, Source: **https://ci.appveyor.com/nuget/ResharperCodeContractNullabilityFxCop**
     * Click **Update**, **Ok**
-* In Visual Studio, select **MyGet** as package source in the GUI or Package Manager Console.
+* Open the NuGet package manager console (**Tools**, **NuGet Package Manager**, **Package Manager Console**)
+    * Select **AppVeyor ResharperCodeContractNullabilityFxCop** as package source
+    * Run command: `Install-Package ResharperCodeContractNullabilityFxCop -pre`
 
 ## Running on your build server
 
-This assumes your project uses ResharperCodeContractNullabilityFxCop, but Resharper is not installed on your build server. 
-To make the analyzer run there, make sure to install External Annotations on the server as a pre-build step:
+This assumes your project uses ResharperCodeContractNullabilityFxCop, but Resharper is not installed on your build server. To make the analyzer run there, make sure to install External Annotations on the server as a pre-build step:
 
-* ```nuget install JetBrains.ExternalAnnotations -Version 10.0.15```
-* ```xcopy JetBrains.ExternalAnnotations.10.0.15\*.xml "%LOCALAPPDATA%\JetBrains\Installations\ReSharperPlatformVs14\ExternalAnnotations" /s /i /r /y /q```
+* ```nuget install JetBrains.ExternalAnnotations -Version 10.2.29```
+* ```xcopy JetBrains.ExternalAnnotations.10.2.29\*.xml "%LOCALAPPDATA%\JetBrains\Installations\ReSharperPlatformVs15\ExternalAnnotations" /s /i /r /y /q```
